@@ -1,0 +1,25 @@
+﻿@model  MovieMania.Models.LoginViewModel
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+<h1>Login</h1>
+
+<form method="post">
+    <div asp-validation-summary="ModelOnly"></div>
+    <div class="form-group">
+        <label asp-for="Email"></label>
+        <input type="email" class="form-control" asp-for="Email" />
+        <span asp-validation-for="Email"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Password"></label>
+        <input type="password" class="form-control" asp-for="Password" />
+        <span asp-validation-for="Password"></span>
+    </div>
+    <div class="forgot-password">
+        <a asp-action="ForgotPassword">Forgot Password</a>
+    </div>
+    <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+</form>
