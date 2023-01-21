@@ -1,14 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MovieMania.Data;
 using MovieMania.Models;
 
 namespace MovieMania.Controllers
 {
     public class MovieController : Controller
     {
-        public MovieController()
-        {
+        private readonly ApplicationDbContext _db;
 
+        public MovieController(ApplicationDbContext db)
+        {
+            _db = db;
         }
 
         public IActionResult AddMovie()
@@ -17,10 +18,12 @@ namespace MovieMania.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddMovie(MovieViewModel Form)
+        public IActionResult AddMovie(MoviesModel Form)
         {
             if (ModelState.IsValid)
             {
+                _db.Add(Form);
+                _db.SaveChanges();  
             }
 
             return View();

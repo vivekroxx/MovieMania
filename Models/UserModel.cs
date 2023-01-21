@@ -2,8 +2,11 @@
 
 namespace MovieMania.Models
 {
-    public class RegisterViewModel
+    public class UserModel
     {
+        [Required]
+        [Display(Name = "Name")]
+        public string Name { get; set; }
         [Required]
         [EmailAddress]
         [Display(Name = "Email")]
@@ -19,5 +22,8 @@ namespace MovieMania.Models
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+        [Required]
+        [Display(Name = "User Role")]
+        public UserRole Role { get; set; }
     }
 }

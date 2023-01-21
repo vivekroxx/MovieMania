@@ -1,25 +1,42 @@
-﻿@model RegisterViewModel
+﻿@model UserModel
 
 @{
     ViewData["Title"] = "Registor";
 }
 
-<form asp-controller="Account" asp-action="Register" method="post">
-    <div asp-validation-summary="All"></div>
-    <div>
-        <label asp-for="Email"></label>
-        <input asp-for="Email" type="email" />
-        <span asp-validation-for="Email"></span>
+<div class="card w-50 mx-auto">
+    <div class="card-header">
+        <h4>Register</h4>
     </div>
-    <div>
-        <label asp-for="Password"></label>
-        <input asp-for="Password" type="password" />
-        <span asp-validation-for="Password"></span>
+    <div class="card-body">
+        <form asp-controller="Account" asp-action="SignUp" method="post">
+            <div asp-validation-summary="ModelOnly"></div>
+            <div class="form-group mb-2">
+                <label asp-for="Name"></label>
+                <input type="text" class="form-control" asp-for="Name" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-2">
+                <label asp-for="Email"></label>
+                <input type="email" class="form-control" asp-for="Email" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-2">
+                <label asp-for="Password"></label>
+                <input type="password" class="form-control" asp-for="Password" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-2">
+                <label asp-for="ConfirmPassword"></label>
+                <input type="password" class="form-control" asp-for="ConfirmPassword" />
+                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-2">
+                <label asp-for="Role"></label>
+                <select asp-for="Role" asp-items="Html.GetEnumSelectList<UserRole>()" class="form-select"></select>
+                <span asp-validation-for="Role" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block mt-4 w-100">Register</button>
+        </form>
     </div>
-    <div>
-        <label asp-for="ConfirmPassword"></label>
-        <input asp-for="ConfirmPassword" type="password" />
-        <span asp-validation-for="ConfirmPassword"></span>
-    </div>
-    <button type="submit">Register</button>
-</form>
+</div>

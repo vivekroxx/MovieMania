@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using MovieMania.Data;
+﻿using Microsoft.AspNetCore.Mvc;
 using MovieMania.Models;
 using System.Diagnostics;
 
@@ -17,14 +15,14 @@ namespace MovieMania.Controllers
 
         public IActionResult Index()
         {
-            MovieViewModel model = new()
+            MoviesModel model = new()
             {
                 Id = 1,
                 Name = "Vivek",
                 Author = "Vivek KUmar",
                 Description = "ABCD",
                 Duration = TimeSpan.Zero,
-                ReleaseDate= DateTime.Now
+                ReleaseDate = DateTime.Now
             };
 
             return View(model);
@@ -33,7 +31,7 @@ namespace MovieMania.Controllers
         public IActionResult Details(int Id)
         {
 
-            MovieViewModel model = new()
+            MoviesModel model = new()
             {
                 Id = 1,
                 Name = "Vivek",
