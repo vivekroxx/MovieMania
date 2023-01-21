@@ -15,7 +15,7 @@ namespace MovieMania.Controllers
 
         public IActionResult Index()
         {
-            MoviesModel model = new()
+            MovieModel model = new()
             {
                 Id = 1,
                 Name = "Vivek",
@@ -31,7 +31,7 @@ namespace MovieMania.Controllers
         public IActionResult Details(int Id)
         {
 
-            MoviesModel model = new()
+            MovieModel model = new()
             {
                 Id = 1,
                 Name = "Vivek",

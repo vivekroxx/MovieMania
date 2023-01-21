@@ -18,7 +18,7 @@ namespace MovieMania.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddMovie(MoviesModel Form)
+        public IActionResult AddMovie(MovieModel Form)
         {
             if (ModelState.IsValid)
             {

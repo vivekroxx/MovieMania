@@ -7,10 +7,10 @@ namespace MovieMania.Models
 {
     public interface IMovieRepository
     {
-        Task<IEnumerable<MoviesModel>> GetAll();
-        Task<MoviesModel> GetById(int id);
-        Task Add(MoviesModel movie);
-        Task Update(MoviesModel movie);
+        Task<IEnumerable<MovieModel>> GetAll();
+        Task<MovieModel> GetById(int id);
+        Task Add(MovieModel movie);
+        Task Update(MovieModel movie);
         Task Delete(int id);
     }
 
@@ -23,22 +23,22 @@ namespace MovieMania.Models
             _db = context;
         }
 
-        public async Task<IEnumerable<MoviesModel>> GetAll()
+        public async Task<IEnumerable<MovieModel>> GetAll()
         {
             return await _db.Movies.ToListAsync();
         }
 
-        public async Task<MoviesModel> GetById(int id)
+        public async Task<MovieModel> GetById(int id)
         {
             return await _db.Movies.FindAsync(id);
         }
 
-        public async Task Add(MoviesModel movie)
+        public async Task Add(MovieModel movie)
         {
             await _db.Movies.AddAsync(movie);
             await _db.SaveChangesAsync();
         }
-        public async Task Update(MoviesModel movie)
+        public async Task Update(MovieModel movie)
         {
             _db.Movies.Update(movie);
             await _db.SaveChangesAsync();

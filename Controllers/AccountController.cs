@@ -85,7 +85,7 @@ namespace MovieMania.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public IActionResult SignUp(UserModel model)
+        public IActionResult SignUp(UserCreateViewModel model)
         {
             if (ModelState.IsValid)
             {

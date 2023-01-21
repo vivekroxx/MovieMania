@@ -1,4 +1,4 @@
-﻿@model MoviesModel
+﻿@model MovieModel
 @{
     ViewData["Title"] = "Home";
 }
@@ -10,10 +10,7 @@
         <img class="card-img-top" src="https://spectrum-ent.com/wp-content/uploads/2020/07/epic-movie.jpg" asp-append-version="true">
         <div class="card-body">
             <h5 class="card-title">@Model.Name</h5>
-            <h5 class="card-title">@Model.Author</h5>
-            <h5 class="card-title">@Model.Description</h5>
             <h5 class="card-title">@Model.Duration</h5>
-            <h5 class="card-title">@Model.ReleaseDate</h5>
             <a asp-controller="Movie" asp-action="AddToFavorite" asp-route-id="@Model.Id" class="btn btn-primary my-1 d-block">Add to Favorite</a>
             <a asp-controller="Home" asp-action="Details" asp-route-id="@Model.Id" class="btn btn-primary d-block">View Details</a>
         </div>
