@@ -10,15 +10,15 @@ namespace MovieMania.Controllers
     public class AccountController : Controller
     {
         //private readonly IMediator _mediator;
-        //private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly SignInManager<UserModel> _signInManager;
         //private readonly UserManager<ApplicationUser> _userManager;
 
-        //public AccountController(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, IMediator mediator)
-        //{
-        //    _signInManager = signInManager;
-        //    _userManager = userManager;
-        //    _mediator = mediator;
-        //}
+        public AccountController(SignInManager<UserModel> signInManager)
+        {
+            _signInManager = signInManager;
+            //_userManager = userManager;
+            //_mediator = mediator;
+        }
 
         [TempData]
         public string MaskedEmailAddress { get; set; }
@@ -67,13 +67,35 @@ namespace MovieMania.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult SignIn(string returnUrl = null)
+        public IActionResult SignIn()
         {
-            // Clear the existing external cookie to ensure a clean login process
-            //await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
-
-            ViewData["ReturnUrl"] = returnUrl;
             return View();
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SignIn(LoginViewModel model, string returnUrl = null)
+        {
+            ViewData["ReturnUrl"] = returnUrl;
+            if (ModelState.IsValid)
+            {
+                // This doesn't count login failures towards account lockout To enable password
+                // failures to trigger account lockout, set lockoutOnFailure: true
+                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, false, lockoutOnFailure: false);
+                if (result.Succeeded)
+                {
+                    return RedirectToLocal(returnUrl);
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    return View(model);
+                }
+            }
+
+            // If we got this far, something failed, redisplay form
+            return View(model);
         }
 
         [HttpGet]

@@ -9,8 +9,8 @@
         <h4>Add New Movie</h4>
     </div>
     <div class="card-body">
-        <form method="post">
-            <div asp-validation-summary="ModelOnly"></div>
+        <form asp-action="AddMovie" asp-controller="Movie" enctype="multipart/form-data" method="post">
+            @*<div asp-validation-summary="ModelOnly"></div>*@
             <div class="form-group mb-2">
                 <label asp-for="Name"></label>
                 <input type="text" class="form-control" asp-for="Name" />
@@ -38,7 +38,7 @@
             </div>
             <div class="form-group mb-2">
                 <label asp-for="Photo"></label>
-                <input type="file" class="form-control" asp-for="Photo" />
+                <input asp-for="Photo" class="form-control" />
                 <span asp-validation-for="Photo" class="text-danger"></span>
             </div>
             <button type="submit" class="btn btn-primary btn-block mt-4 w-100">Add Movie</button>
