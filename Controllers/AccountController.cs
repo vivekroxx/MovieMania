@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MovieMania.Data;
 using MovieMania.Infrastructure;
-using MovieMania.Infrastructure.Request;
 using MovieMania.Models;
+using MovieMania.Request;
 
 namespace MovieMania.Controllers
 {
@@ -100,14 +100,14 @@ namespace MovieMania.Controllers
 
             var result = await _mediator.Send(new Create.Command(code, model), HttpContext.RequestAborted);
 
-            if (!result.Succeeded)
-            {
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError(string.Empty, error);
-                }
-                return await Failed();
-            }
+            //if (!result.Succeeded)
+            //{
+            //    foreach (var error in result.Errors)
+            //    {
+            //        ModelState.AddModelError(string.Empty, error);
+            //    }
+            //    return await Failed();
+            //}
 
             return RedirectToAction(nameof(CreateAccountConfirmation));
 
@@ -142,7 +142,7 @@ namespace MovieMania.Controllers
             }
 
             var user = await _userManager.FindByEmailAsync(model.Email);
-            if (user == null || user.DeactivatedDate.HasValue)
+            if (user == null)
             {
                 // Don't reveal that the user does not exist
                 return Confirmation();

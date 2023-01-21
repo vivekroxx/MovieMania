@@ -19,7 +19,7 @@ namespace MovieMania.Controllers
         }
 
         public IActionResult Privacy()
-        { 
+        {
             return View();
         }
 
