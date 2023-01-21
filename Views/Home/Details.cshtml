@@ -1,9 +1,7 @@
 ﻿@model MovieViewModel
 @{
-    ViewData["Title"] = "Home";
+    ViewData["Title"] = "Movie Detail";
 }
-
-<h1>Home</h1>
 
 <div class="row">
     <div class="card col-3 m-2" style="width: 15rem;">
@@ -14,8 +12,8 @@
             <h5 class="card-title">@Model.Description</h5>
             <h5 class="card-title">@Model.Duration</h5>
             <h5 class="card-title">@Model.ReleaseDate</h5>
-            <a asp-controller="Movie" asp-action="AddToFavorite" asp-route-id="@Model.Id" class="btn btn-primary my-1 d-block">Add to Favorite</a>
-            <a asp-controller="Home" asp-action="Details" asp-route-id="@Model.Id" class="btn btn-primary d-block">View Details</a>
+            <a href="#" class="btn btn-primary my-1 d-block">Add to Favourite</a>
+            <a asp-controller="Home" asp-action="Index" class="btn btn-primary d-block">Go Back</a>
         </div>
     </div>
 </div>
