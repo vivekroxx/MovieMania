@@ -8,5 +8,11 @@ namespace MovieMania.Controllers
         {
             return View();
         }
+
+        public IActionResult AddMovie()
+        {
+            return View("~/Views/Form/AddMovie.cshtml");
+        }
+
     }
 }

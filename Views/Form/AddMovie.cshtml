@@ -3,3 +3,45 @@
 @{
     ViewData["Title"] = "Add Movie";
 }
+
+<div class="card w-50 mx-auto">
+    <div class="card-header">
+        <h4>Add New Movie</h4>
+    </div>
+    <div class="card-body">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly"></div>
+            <div class="form-group">
+                <label asp-for="Name"></label>
+                <input type="text" class="form-control" asp-for="Name" />
+                <span asp-validation-for="Name"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description"></label>
+                <input type="text" class="form-control" asp-for="Description" />
+                <span asp-validation-for="Description"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Author"></label>
+                <input type="text" class="form-control" asp-for="Author" />
+                <span asp-validation-for="Author"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ReleaseDate"></label>
+                <input type="date" class="form-control" asp-for="ReleaseDate" />
+                <span asp-validation-for="ReleaseDate"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Duration"></label>
+                <input type="time" class="form-control" asp-for="Duration" />
+                <span asp-validation-for="Duration"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Album"></label>
+                <input type="file" class="form-control" asp-for="Album" />
+                <span asp-validation-for="Album"></span>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block mt-4">Create</button>
+        </form>
+    </div>
+</div>
