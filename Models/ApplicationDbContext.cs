@@ -11,5 +11,10 @@ namespace MovieMania.Models
 
         public virtual DbSet<MoviesModel> Movies { get; set; }
         public virtual DbSet<User> Users { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Seed();
+        }
     }
 }
