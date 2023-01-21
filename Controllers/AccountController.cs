@@ -72,7 +72,7 @@ namespace MovieMania.Controllers
 
         [HttpGet("/create-account")]
         [AllowAnonymous]
-        public async Task<IActionResult> CreateAccount([FromQuery] string code = null, [FromQuery] string email = null)
+        public async Task<IActionResult> SignUp([FromQuery] string code = null, [FromQuery] string email = null)
         {
             if (code == null)
             {
@@ -82,7 +82,7 @@ namespace MovieMania.Controllers
             if (User.Identity.IsAuthenticated)
             {
                 await _signInManager.SignOutAsync();
-                return RedirectToAction(nameof(CreateAccount), new { code, email });
+                return RedirectToAction(nameof(SIgnUp), new { code, email });
             }
 
             return View(await _mediator.Send(new Create.Query(code, email), HttpContext.RequestAborted));
@@ -91,7 +91,7 @@ namespace MovieMania.Controllers
         [HttpPost("/create-account")]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateAccount([FromQuery] string code = null, [FromForm(Name = nameof(Create.ViewModel.Form))] Create.FormModel model = null)
+        public async Task<IActionResult> SIgnUp([FromQuery] string code = null, [FromForm(Name = nameof(Create.ViewModel.Form))] Create.FormModel model = null)
         {
             if (!ModelState.IsValid)
             {
@@ -109,7 +109,7 @@ namespace MovieMania.Controllers
             //    return await Failed();
             //}
 
-            return RedirectToAction(nameof(CreateAccountConfirmation));
+            return RedirectToAction(nameof(SignUpConfirmation));
 
             async Task<IActionResult> Failed()
             {
@@ -119,7 +119,7 @@ namespace MovieMania.Controllers
 
         [HttpGet("/create-account-confirmation")]
         [AllowAnonymous]
-        public IActionResult CreateAccountConfirmation()
+        public IActionResult SignUpConfirmation()
         {
             return View();
         }
