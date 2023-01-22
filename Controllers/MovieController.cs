@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using MovieMania.Models;
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
@@ -85,17 +86,25 @@ namespace MovieMania.Controllers
         }
 
         [HttpPost]
-        public IActionResult Delete(int Id)
+        public IActionResult Delete(int id)
         {
-            var movie = _db.Movies.FirstOrDefault(x => x.Id == Id);
-            if (movie != null)
+            var movie = _db.Movies.FirstOrDefault(x => x.Id == id);
+            if (movie == null)
             {
-                _db.Remove(movie);
-                _db.SaveChanges();
+                return NotFound();
             }
+            var filePath = Path.Combine(_hostingEnvironment.WebRootPath, "image", movie.PhotoPath);
+            if (System.IO.File.Exists(filePath))
+            {
+                System.IO.File.Delete(filePath);
+            }
+            _db.Remove(movie);
+            _db.SaveChanges();
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction(nameof(HomeController.Index), "Home");
         }
+
+
 
         [HttpPost]
         public IActionResult AddToFavorite(int Id)

@@ -23,8 +23,10 @@
                         </a>
 
                         <ul class="dropdown-menu dropdown-menu-end">
-                            <li><p class="dropdown-item disabled">Admin</p></li>
-                            <li><p class="dropdown-item disabled alert-dark">User Name</p></li>
+                            <li class="d-flex justify-content-between p-2">
+                                <img src="~/image/noimage.png" style="max-height: 40px; border-radius: 3px;" asp-append-version="true" />
+                                <p class="fw-bold ml-2">User Name</p>
+                            </li>
                             <li>
                                 <form asp-controller="Account" asp-action="SignOut" method="post">
                                     <button type="submit" class="dropdown-item">Logout</button>
