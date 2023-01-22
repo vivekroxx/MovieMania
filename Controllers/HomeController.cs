@@ -20,9 +20,9 @@ namespace MovieMania.Controllers
             return View(movieList);
         }
 
-        public IActionResult Details(int Id)
+        public IActionResult Details(int id)
         {
-            var movie = _db.Movies.FirstOrDefault(x => x.Id == Id);
+            var movie = _db.Movies.FirstOrDefault(x => x.Id == id);
 
             return View(movie);
         }

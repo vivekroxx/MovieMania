@@ -1,16 +1,20 @@
-﻿@model MovieMania.Models.MovieCreateViewModel
+﻿@model MovieEditViewModel
 
 @{
     ViewData["Title"] = "Add Movie";
+    var photoPath = "~/image/" + Model.ExistingPhotoPath;
 }
 
-<div class="card w-50 mx-auto">
+<div class="card w-50 mx-auto my-2">
     <div class="card-header">
         <h4>Add New Movie</h4>
     </div>
     <div class="card-body">
-        <form asp-action="AddMovie" asp-controller="Movie" enctype="multipart/form-data" method="post">
+        <form asp-action="Edit" asp-controller="Movie" enctype="multipart/form-data" method="post">
             <div asp-validation-summary="ModelOnly"></div>
+            <input asp-for="Id" type="hidden"/>
+            <input asp-for="ExistingPhotoPath" type="hidden"/>
+
             <div class="form-group mb-2">
                 <label asp-for="Name"></label>
                 <input type="text" class="form-control" asp-for="Name" />
@@ -37,11 +41,14 @@
                 <span asp-validation-for="Duration" class="text-danger"></span>
             </div>
             <div class="form-group mb-2">
-                <label asp-for="Photo"></label>
+                <label asp-for="Photo">Choose new file</label>
                 <input asp-for="Photo" class="form-control" />
                 <span asp-validation-for="Photo" class="text-danger"></span>
             </div>
+            <img class="card-img-top" style="object-fit:fill; max-width: 30vh; max-height: 30vh;"
+                 src="@photoPath" asp-append-version="true">
             <button type="submit" class="btn btn-primary btn-block mt-4 w-100">Update</button>
+            <a asp-action="Details" asp-controller="Home" asp-route-id="@Model.Id" class="btn btn-secondary btn-block mt-2 w-100">Cancel</a>
         </form>
     </div>
 </div>
