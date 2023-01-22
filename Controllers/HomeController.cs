@@ -23,6 +23,10 @@ namespace MovieMania.Controllers
         public IActionResult Details(int id)
         {
             var movie = _db.Movies.FirstOrDefault(x => x.Id == id);
+            if (movie == null)
+            {
+                return View("NotFound");
+            }
 
             return View(movie);
         }

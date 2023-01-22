@@ -1,7 +1,7 @@
 ﻿@model MovieModel
 @{
     ViewData["Title"] = "Movie Detail";
-    var photoPath = "~/image/" + Model.PhotoPath;
+    var photoPath = "~/image/" + (!String.IsNullOrWhiteSpace(Model.PhotoName) ? Model.PhotoName : "noimage.webp");
 }
 
 <div class="card">

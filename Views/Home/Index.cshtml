@@ -9,7 +9,7 @@
     {
         @foreach (var item in Model)
         {
-            var photoPath = "~/image/" + @item.PhotoPath;
+            var photoPath = "~/image/" + (!String.IsNullOrWhiteSpace(@item.PhotoName) ? @item.PhotoName : "noimage.webp");
             <div class="card col-3 m-2" style="width: 15rem;">
                 <img class="card-img-top" src="@photoPath" asp-append-version="true">
                 <div class="card-body">
@@ -24,7 +24,7 @@
     else
     {
         <div class="text-center">
-            No Movies to show this moment.
+            No Movies to show at this moment.
         </div>
     }
 </div>
