@@ -1,0 +1,19 @@
+﻿@{
+    Layout = "_Layout.Shell.cshtml";
+}
+
+<style>
+    .unathorized-container{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-image: url('/image/loginbackground.jpg');
+        background-size: cover;
+        background-position: center;
+    }
+</style>
+
+<div class="unathorized-container">
+    @RenderBody()
+</div>

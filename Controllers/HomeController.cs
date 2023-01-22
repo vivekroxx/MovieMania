@@ -6,42 +6,25 @@ namespace MovieMania.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ApplicationDbContext _db;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ApplicationDbContext db)
         {
-            _logger = logger;
+            _db = db;
         }
 
         public IActionResult Index()
         {
-            MovieModel model = new()
-            {
-                Id = 1,
-                Name = "Vivek",
-                Author = "Vivek KUmar",
-                Description = "ABCD",
-                Duration = TimeSpan.Zero,
-                ReleaseDate = DateTime.Now
-            };
+            var movieList = _db.Movies.ToList();
 
-            return View(model);
+            return View(movieList);
         }
 
         public IActionResult Details(int Id)
         {
+            var movie = _db.Movies.FirstOrDefault(x => x.Id == Id);
 
-            MovieModel model = new()
-            {
-                Id = 1,
-                Name = "Vivek",
-                Author = "Vivek KUmar",
-                Description = "ABCD",
-                Duration = TimeSpan.Zero,
-                ReleaseDate = DateTime.Now
-            };
-
-            return View(model);
+            return View(movie);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

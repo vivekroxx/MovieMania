@@ -1,42 +1,100 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Hosting;
 using MovieMania.Models;
+using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
 namespace MovieMania.Controllers
 {
     public class MovieController : Controller
     {
         private readonly ApplicationDbContext _db;
-        //private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly IHostingEnvironment _hostingEnvironment;
 
-        public MovieController(ApplicationDbContext db)
+        public MovieController(ApplicationDbContext db, IHostingEnvironment hostingEnvironment)
         {
             _db = db;
-            //_hostingEnvironment = hostingEnvironment;
+            _hostingEnvironment = hostingEnvironment;
 
         }
 
-        public IActionResult AddMovie()
+        [HttpGet]
+        public IActionResult Create()
         {
             return View();
         }
 
         [HttpPost]
-        public IActionResult AddMovie([FromBody] MovieCreateViewModel Form)
+        public IActionResult Create(MovieCreateViewModel model)
         {
             if (ModelState.IsValid)
             {
                 string uniqueFileName = null;
-                if (Form.Photo != null)
+                if (model.Photo != null)
                 {
-
+                    string uploadsFolder = Path.Combine(_hostingEnvironment.WebRootPath, "image");
+                    uniqueFileName = Guid.NewGuid().ToString() + "_" + model.Photo.FileName;
+                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                    model.Photo.CopyTo(new FileStream(filePath, FileMode.Create));
                 }
 
-                _db.Add(Form);
+                MovieModel newMovie = new()
+                {
+                    Name = model.Name,
+                    PhotoPath = uniqueFileName ?? "noimage.png",
+                    Author = model.Author,
+                    Description = model.Description,
+                    Duration = model.Duration,
+                    ReleaseDate = model.ReleaseDate,
+                };
+
+                _db.Add(newMovie);
                 _db.SaveChanges();
             }
 
-            return View();
+            return RedirectToAction(nameof(HomeController.Index), "Home");
+        }
+
+        [HttpPost]
+        public IActionResult Update(MovieCreateViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                string uniqueFileName = null;
+                if (model.Photo != null)
+                {
+                    string uploadsFolder = Path.Combine(_hostingEnvironment.WebRootPath, "image");
+                    uniqueFileName = Guid.NewGuid().ToString() + "_" + model.Photo.FileName;
+                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                    model.Photo.CopyTo(new FileStream(filePath, FileMode.Create));
+                }
+
+                MovieModel newMovie = new()
+                {
+                    Name = model.Name,
+                    PhotoPath = uniqueFileName ?? "noimage.png",
+                    Author = model.Author,
+                    Description = model.Description,
+                    Duration = model.Duration,
+                    ReleaseDate = model.ReleaseDate,
+                };
+
+                _db.Add(newMovie);
+                _db.SaveChanges();
+            }
+
+            return RedirectToAction(nameof(HomeController.Index), "Home");
+        }
+
+        [HttpPost]
+        public IActionResult Delete(int Id)
+        {
+            var movie = _db.Movies.FirstOrDefault(x => x.Id == Id);
+            if (movie != null)
+            {
+                _db.Remove(movie);
+                _db.SaveChanges();
+            }
+
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpPost]

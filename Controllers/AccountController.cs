@@ -5,17 +5,15 @@ using MovieMania.Models;
 
 namespace MovieMania.Controllers
 {
-    [Authorize]
-    [Route("/[action]")]
     public class AccountController : Controller
     {
         //private readonly IMediator _mediator;
-        private readonly SignInManager<UserModel> _signInManager;
+        //private readonly SignInManager<UserModel> _signInManager;
         //private readonly UserManager<ApplicationUser> _userManager;
 
-        public AccountController(SignInManager<UserModel> signInManager)
+        public AccountController()
         {
-            _signInManager = signInManager;
+            //_signInManager = signInManager;
             //_userManager = userManager;
             //_mediator = mediator;
         }
@@ -65,8 +63,8 @@ namespace MovieMania.Controllers
         //}
 
 
-        [HttpGet]
-        [AllowAnonymous]
+        [HttpGet("/SignIn")]
+        //[AllowAnonymous]
         public IActionResult SignIn()
         {
             return View();
@@ -82,23 +80,23 @@ namespace MovieMania.Controllers
             {
                 // This doesn't count login failures towards account lockout To enable password
                 // failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, false, lockoutOnFailure: false);
-                if (result.Succeeded)
-                {
-                    return RedirectToLocal(returnUrl);
-                }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                    return View(model);
-                }
+                //var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, false, lockoutOnFailure: false);
+                //if (result.Succeeded)
+                //{
+                //    return RedirectToLocal(returnUrl);
+                //}
+                //else
+                //{
+                //    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                //    return View(model);
+                //}
             }
 
             // If we got this far, something failed, redisplay form
             return View(model);
         }
 
-        [HttpGet]
+        [HttpGet("/SignUp")]
         [AllowAnonymous]
         public IActionResult SignUp()
         {
@@ -248,13 +246,13 @@ namespace MovieMania.Controllers
         //    return View(model);
         //}
 
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> SignOut()
-        //{
-        //    await _signInManager.SignOutAsync();
-        //    return RedirectToAction(nameof(HomeController.Index), "Home");
-        //}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SignOut()
+        {
+            //await _signInManager.SignOutAsync();
+            return RedirectToAction(nameof(AccountController.SignIn), "Account");
+        }
 
         #region Helpers
 

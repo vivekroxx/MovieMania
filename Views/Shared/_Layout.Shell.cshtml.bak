@@ -1,0 +1,198 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Huntsman Cancer Institute</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#0252a1">
+    @*DataTable CSS*@
+    <link rel="stylesheet" type="text/css" href="../Styles/pages/data-table.css">
+
+    <meta name="msapplication-TileColor" content="#7cd2dd">
+    <meta name="theme-color" content="#0252a1">
+    <style nws-csp-add-nonce="false">
+        @@media only screen {
+            body {
+                overflow: hidden;
+            }
+
+            #unsupported-screen-size-message {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: #F9FAFC;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 9999;
+            }
+
+                #unsupported-screen-size-message > div {
+                    width: 100%;
+                    background-color: #0252A1;
+                    color: #fff;
+                }
+
+            @@media (min-width: 992px) {
+                body {
+                    overflow: auto;
+                }
+
+                #unsupported-screen-size-message {
+                    display: none;
+                }
+            }
+        }
+
+        @@media not scren {
+            #unsupported-screen-size-message {
+                display: none;
+            }
+        }
+
+        /*************************************/
+        .usercheckbox-container{
+            max-height: 290px;
+            overflow: auto;
+            border-top: 1px solid lightgrey;
+        }
+        .usercheckbox-container::-webkit-scrollbar{
+            background-color: lightgray;
+            width: 8px;
+            height: 8px;
+        }
+        .usercheckbox-container::-webkit-scrollbar-thumb{
+            background-color: silver;
+            background-color: grey;
+            border-radius: 20px;
+        }
+        .usercheckbox-container .usercheckbox{
+            display: flex;
+            align-items: center;
+            padding: 3px 4px;
+            border-radius: 3px;
+            cursor: pointer;
+            user-select: none;
+        }
+        .usercheckbox-container .usercheckbox:hover{
+            background-color: #add8e6d9;
+        }
+
+    </style>
+    <environment include="Development">
+        <link rel="stylesheet" href="~/css/site.css" tl-explode-bundle="true" />
+    </environment>
+    <environment exclude="Development">
+        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" tl-subresource-integrity="true" />
+    </environment>
+    @await RenderSectionAsync("head", required: false)
+</head>
+<body class="@ViewData["BodyCssClass"]">
+    <div id="unsupported-screen-size-message">
+        <div class="text-center px-4 py-5">
+            <h3>This screen size is not supported</h3>
+            <p>This website cannot be displayed on small screens. Please use a device with a larger screen size.</p>
+        </div>
+    </div>
+
+    @RenderBody()
+
+    <environment include="Development">
+        <script src="~/js/jquery.js" tl-explode-bundle="true"></script>
+        <script src="~/js/bootstrap.js" tl-explode-bundle="true"></script>
+        <script src="~/js/site.js" tl-explode-bundle="true"></script>
+        @*DataTable CDN*@
+        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous" nws-csp-add-nonce="true"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js" integrity="sha256-fzFFyH01cBVPYzl16KT40wqjhgPtq6FFUB6ckN2+GGw=" crossorigin="anonymous" nws-csp-add-nonce="true"></script>
+        <script src="~/js/site.min.js" asp-append-version="true" tl-subresource-integrity="true" nws-csp-add-nonce="true"></script>
+        @*DataTable CDN*@
+        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"></script>
+    </environment>
+    <partial name="_ValidationScriptsPartial" />
+    @await RenderSectionAsync("modals", required: false)
+    @await RenderSectionAsync("Scripts", required: false)
+    @Html.RenderToastRMessages()
+
+    <script>
+        @*Intialize Datatable*@
+            $(document).ready(function () {
+                // Datatable setting for Alert Page
+                $('#alert-data-table').DataTable({
+                    searching: false,
+                    paging: false,
+                    info: false,
+                    stateSave: false,
+                    scrollY: '60vh',
+                    scrollCollapse: true,
+                    columnDefs: [
+                        { 'targets': 3, 'orderable': false },
+                        { 'targets': 2, 'type': 'date-eu' }
+                    ],
+                    language: {
+                        "emptyTable": "No Alerts Available"
+                    }
+                });
+
+                //Datatable setting for Task Page
+                $('#task-data-table').DataTable({
+                    searching: false,
+                    paging: false,
+                    info: false,
+                    stateSave: false,
+                    scrollY: '60vh',
+                    scrollCollapse: true,
+                    columnDefs: [
+                        { 'targets': [7, 8], 'orderable': false, },
+                    ],
+                    language: {
+                        "emptyTable": "No Alerts Available"
+                    }
+                });
+
+                //$('.alert-table-collapsible').DataTable({
+                //    searching: false,
+                //    paging: false,
+                //    info: false,
+                //    scrollY: '60vh',
+                //    scrollCollapse: true,
+                //    columnDefs: [
+                //        { 'targets': [0, 8, 9], 'orderable': false }
+                //    ],
+                //    language: {
+                //        "emptyTable": "No Alerts Available"
+                //    }
+                //});
+
+            });
+
+        // START ********** Manage active state of alert & task selection tab filter **********
+        var baseUrl = window.location.pathname;
+        var filterParam = window.location.search;
+        var browserUrl = baseUrl + filterParam;
+        $('.btn-group > a[href="' + browserUrl + '"]')?.addClass('active').siblings()?.removeClass('active');
+        // END ********** Manage active state of alert & task selection tab filter **********
+
+        $("#severity-filter").select2(
+            {
+                placeholder: 'Severity Filter',
+                closeOnSelect: false,
+                width: 150,
+                selectionAdapter: CustomMultipleSelection,
+                templateResult: CustomMultipleSelection.resultsTemplate,
+                minimumResultsForSearch: -1
+            }
+        );
+
+    </script>
+
+</body>
+</html>
