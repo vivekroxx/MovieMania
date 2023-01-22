@@ -111,14 +111,16 @@ namespace MovieMania.Controllers
 
         private string ProcessUploadFile(MovieCreateViewModel model)
         {
-            string uniqueFileName = string.Empty;
+            string uniqueFileName = null;
             if (model.Photo != null)
             {
                 string uploadsFolder = Path.Combine(_hostingEnvironment.WebRootPath, "image");
                 uniqueFileName = Guid.NewGuid().ToString() + "_" + model.Photo.FileName;
                 string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                using var fileStream = new FileStream(filePath, FileMode.Create);
-                model.Photo.CopyTo(fileStream);
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    model.Photo.CopyTo(fileStream);
+                }
             }
 
             return uniqueFileName;
@@ -146,8 +148,6 @@ namespace MovieMania.Controllers
 
             return RedirectToAction(nameof(HomeController.Index), "Home");
         }
-
-
 
         [HttpPost]
         public IActionResult AddToFavorite(int Id)
