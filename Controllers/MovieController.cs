@@ -32,7 +32,7 @@ namespace MovieMania.Controllers
                 MovieModel newMovie = new()
                 {
                     Name = model.Name,
-                    PhotoPath = uniqueFileName ?? "noimage.png",
+                    PhotoPath = uniqueFileName ?? "avatar/noimage.jpg",
                     Author = model.Author,
                     Description = model.Description,
                     Duration = model.Duration,
