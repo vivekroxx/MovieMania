@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MovieMania.Models;
@@ -7,19 +8,14 @@ namespace MovieMania.Controllers
 {
     public class AccountController : Controller
     {
-        //private readonly IMediator _mediator;
-        //private readonly SignInManager<UserModel> _signInManager;
-        //private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public AccountController()
+        public AccountController(SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager)
         {
-            //_signInManager = signInManager;
-            //_userManager = userManager;
-            //_mediator = mediator;
+            _signInManager = signInManager;
+            _userManager = userManager;
         }
-
-        [TempData]
-        public string MaskedEmailAddress { get; set; }
 
         [AllowAnonymous]
         public IActionResult AccessDenied()
@@ -64,7 +60,7 @@ namespace MovieMania.Controllers
 
 
         [HttpGet("/SignIn")]
-        //[AllowAnonymous]
+        [AllowAnonymous]
         public IActionResult SignIn()
         {
             return View();
@@ -105,67 +101,29 @@ namespace MovieMania.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public IActionResult SignUp(UserCreateViewModel model)
+        public async Task<IActionResult> SignUp(UserCreateViewModel model)
         {
             if (ModelState.IsValid)
             {
-                return RedirectToAction("Index", "Home");
+                var user = new IdentityUser
+                {
+                    UserName = model.Email,
+                    Email = model.Email
+                };
+
+                var result = await _userManager.CreateAsync(user, model.Password);
+                if (result.Succeeded)
+                {
+                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    return RedirectToAction(nameof(HomeController.Index), "Home");
+                }
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
             }
 
-            return View();
-        }
-
-        //[HttpGet("/create-account")]
-        //[AllowAnonymous]
-        //public async Task<IActionResult> SignUp([FromQuery] string code = null, [FromQuery] string email = null)
-        //{
-        //    if (code == null)
-        //    {
-        //        throw new ApplicationException("A code must be supplied for account creation.");
-        //    }
-
-        //    if (User.Identity.IsAuthenticated)
-        //    {
-        //        await _signInManager.SignOutAsync();
-        //        return RedirectToAction(nameof(SignUp), new { code, email });
-        //    }
-
-        //    return View(await _mediator.Send(new Create.Query(code, email), HttpContext.RequestAborted));
-        //}
-
-        //[HttpPost("/create-account")]
-        //[AllowAnonymous]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> SignUp([FromQuery] string code = null, [FromForm(Name = nameof(Create.ViewModel.Form))] Create.FormModel model = null)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return await Failed();
-        //    }
-
-        //    var result = await _mediator.Send(new Create.Command(code, model), HttpContext.RequestAborted);
-
-        //    //if (!result.Succeeded)
-        //    //{
-        //    //    foreach (var error in result.Errors)
-        //    //    {
-        //    //        ModelState.AddModelError(string.Empty, error);
-        //    //    }
-        //    //    return await Failed();
-        //    //}
-
-        //    return RedirectToAction(nameof(SignUpConfirmation));
-
-        //    async Task<IActionResult> Failed()
-        //    {
-        //        return View(await _mediator.Send(new Create.Query(code, model), HttpContext.RequestAborted));
-        //    }
-        //}
-
-        [HttpGet("/create-account-confirmation")]
-        [AllowAnonymous]
-        public IActionResult SignUpConfirmation()
-        {
             return View();
         }
 
@@ -175,76 +133,6 @@ namespace MovieMania.Controllers
         {
             return View();
         }
-
-        //[HttpPost("/reset-password")]
-        //[AllowAnonymous]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return View(model);
-        //    }
-
-        //    var user = await _userManager.FindByEmailAsync(model.Email);
-        //    if (user == null)
-        //    {
-        //        // Don't reveal that the user does not exist
-        //        return Confirmation();
-        //    }
-
-        //    var result = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);
-        //    if (result.Succeeded)
-        //    {
-        //        return Confirmation();
-        //    }
-
-        //    AddErrors(result);
-
-        //    return View();
-
-        //    IActionResult Confirmation()
-        //    {
-        //        return View("ResetPasswordConfirmation");
-        //    }
-        //}
-
-        //[HttpGet(IdentityRoutes.SignIn)]
-        //[AllowAnonymous]
-        //public async Task<IActionResult> SignIn(string returnUrl = null)
-        //{
-        //    // Clear the existing external cookie to ensure a clean login process
-        //    await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
-
-        //    ViewData["ReturnUrl"] = returnUrl;
-        //    return View();
-        //}
-
-        //[HttpPost(IdentityRoutes.SignIn)]
-        //[AllowAnonymous]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> SignIn(LoginViewModel model, string returnUrl = null)
-        //{
-        //    ViewData["ReturnUrl"] = returnUrl;
-        //    if (ModelState.IsValid)
-        //    {
-        //        // This doesn't count login failures towards account lockout To enable password
-        //        // failures to trigger account lockout, set lockoutOnFailure: true
-        //        var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, false, lockoutOnFailure: false);
-        //        if (result.Succeeded)
-        //        {
-        //            return RedirectToLocal(returnUrl);
-        //        }
-        //        else
-        //        {
-        //            ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-        //            return View(model);
-        //        }
-        //    }
-
-        //    // If we got this far, something failed, redisplay form
-        //    return View(model);
-        //}
 
         [HttpPost]
         [ValidateAntiForgeryToken]

@@ -11,7 +11,7 @@ namespace MovieMania.Models
         }
 
         public virtual DbSet<MovieModel> Movies { get; set; }
-        public virtual DbSet<UserModel> Users { get; set; }
+        public virtual DbSet<RegistorViewModel> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

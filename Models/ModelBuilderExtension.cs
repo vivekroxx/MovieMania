@@ -6,8 +6,8 @@ namespace MovieMania.Models
     {
         public static void Seed(this ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<UserModel>().HasData(
-                new UserModel()
+            modelBuilder.Entity<RegistorViewModel>().HasData(
+                new RegistorViewModel()
                 {
                     Id = 1,
                     Name = "Admin",
