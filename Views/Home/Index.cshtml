@@ -11,7 +11,7 @@
         {
             var photoPath = "~/image/" + (!String.IsNullOrWhiteSpace(@item.PhotoName) ? @item.PhotoName : "noimage.webp");
             <div class="card col-3 m-2" style="width: 15rem;">
-                <img class="img-fluid card-img-top h-50" src="@photoPath" asp-append-version="true">
+                <img class="img-fluid" style="object-fit:cover; height: 200px; aspect-ratio: 1/1;" src="@photoPath" asp-append-version="true">
                 <div class="card-body">
                     <h5 class="card-title">@item.Name</h5>
                     <h5 class="card-title">@item.Duration</h5>

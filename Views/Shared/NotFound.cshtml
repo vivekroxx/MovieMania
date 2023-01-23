@@ -1,6 +1,12 @@
 ﻿@{
-    Layout = "_Layout.NotFound";
+    Layout = "_Layout.Unauthenticated";
     ViewData["Title"] = "Not Found";
 }
 
-<a asp-action="Index" asp-controller="Home">Go Home</a>
+<style>
+    body {
+        background-image: url('/image/bg404.webp');
+    }
+</style>
+
+<a class="btn btn-primary" asp-action="Index" asp-controller="Home">Go To Home</a>
