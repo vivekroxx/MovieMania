@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Diagnostics;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MovieMania.Controllers
@@ -21,6 +22,15 @@ namespace MovieMania.Controllers
                     break;
             }
 
+            return View("NotFound");
+        }
+
+        [Route("Error")]
+        [AllowAnonymous]
+        public IActionResult Error()
+        {
+            //var exceptionDetails = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
+            //exceptionDetails.Error;
             return View("NotFound");
         }
     }
