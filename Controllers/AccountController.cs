@@ -29,35 +29,34 @@ namespace MovieMania.Controllers
             return View();
         }
 
-        //[HttpPost("/change-password")]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        var user = await _userManager.GetUserAsync(User);
-        //        if (user != null)
-        //        {
-        //            var result = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
-        //            if (result.Succeeded)
-        //            {
-        //                ViewBag.Changed = true;
-        //                return View();
-        //            }
+        [HttpPost("/change-password")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.GetUserAsync(User);
+                if (user != null)
+                {
+                    var result = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
+                    if (result.Succeeded)
+                    {
+                        ViewBag.Changed = true;
+                        return View();
+                    }
 
-        //            foreach (var error in result.Errors)
-        //            {
-        //                ModelState.AddModelError(string.Empty, error.Description);
-        //            }
-        //        }
-        //        else
-        //        {
-        //            ModelState.AddModelError(string.Empty, "User account was not found.");
-        //        }
-        //    }
-        //    return View(model);
-        //}
-
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "User account was not found.");
+                }
+            }
+            return View(model);
+        }
 
         [HttpGet("/SignIn")]
         [AllowAnonymous]
@@ -66,12 +65,12 @@ namespace MovieMania.Controllers
             return View();
         }
 
-        [HttpPost]
+        [HttpPost("/SignIn")]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SignIn(LoginViewModel model, string? returnUrl = null)
+        public async Task<IActionResult> SignIn(LoginViewModel model)
         {
-            ViewData["ReturnUrl"] = returnUrl;
+            //ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
                 // This doesn't count login failures towards account lockout To enable password
@@ -79,7 +78,7 @@ namespace MovieMania.Controllers
                 var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, false, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
-                    return RedirectToLocal(returnUrl);
+                    return RedirectToLocal("Home");
                 }
                 else
                 {
@@ -99,8 +98,9 @@ namespace MovieMania.Controllers
             return View();
         }
 
-        [HttpPost]
+        [HttpPost("/SignUp")]
         [AllowAnonymous]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> SignUp(UserCreateViewModel model)
         {
             if (ModelState.IsValid)
