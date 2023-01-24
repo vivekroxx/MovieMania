@@ -27,6 +27,9 @@
                                 <img src="~/image/avatar/admin.jpg" style="max-height: 40px; border-radius: 3px;" asp-append-version="true" />
                                 <p class="fw-bold ml-2">User Name</p>
                             </li>
+                             <li>
+                                <a asp-action="ChangePassowrd" asp-controller="Account" class="dropdown-item">Change Password</a>
+                            </li>
                             <li>
                                 <form asp-controller="Account" asp-action="SignOut" method="post">
                                     <button type="submit" class="dropdown-item">Logout</button>
