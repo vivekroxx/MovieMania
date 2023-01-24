@@ -23,50 +23,52 @@ namespace MovieMania.Controllers
             return View();
         }
 
-        [HttpGet("/SignIn")]
+        [HttpGet]
         [AllowAnonymous]
-        public IActionResult SignIn()
+        public IActionResult Login()
         {
             return View();
         }
 
-        [HttpPost("/SignIn")]
+        [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SignIn(LoginViewModel model)
+        public async Task<IActionResult> Login(LoginViewModel model, string returnUrl)
         {
-            //ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                // This doesn't count login failures towards account lockout To enable password
-                // failures to trigger account lockout, set lockoutOnFailure: true
                 var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
-                    return RedirectToLocal("Home");
-                }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                    return View(model);
+                    if (!String.IsNullOrEmpty(returnUrl))
+                    {
+                        return LocalRedirect(returnUrl);
+                    }
+                    else
+                    {
+                        return RedirectToAction(nameof(HomeController.Index), "Home");
+                    }
                 }
             }
-
-            // If we got this far, something failed, redisplay form
+            else
+            {
+                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                return View(model);
+            }
             return View(model);
         }
 
-        [HttpGet("/SignUp")]
+        [HttpGet]
         [AllowAnonymous]
-        public IActionResult SignUp()
+        public IActionResult Register()
         {
             return View();
         }
 
-        [HttpPost("/SignUp")]
+        [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SignUp(UserCreateViewModel model)
+        public async Task<IActionResult> Register(UserCreateViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -89,13 +91,13 @@ namespace MovieMania.Controllers
             return View();
         }
 
-        [HttpGet("/change-password")]
+        [HttpGet]
         public IActionResult ChangePassword()
         {
             return View();
         }
 
-        [HttpPost("/change-password")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
         {
@@ -133,7 +135,7 @@ namespace MovieMania.Controllers
         public async Task<IActionResult> LogOut()
         {
             await _signInManager.SignOutAsync();
-            return RedirectToAction(nameof(AccountController.SignIn), "Account");
+            return RedirectToAction(nameof(AccountController.Login), "Account");
         }
 
         #region Helpers

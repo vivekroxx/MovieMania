@@ -1,4 +1,7 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.CodeAnalysis.Options;
 using Microsoft.EntityFrameworkCore;
 using MovieMania.Models;
 
@@ -13,6 +16,21 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
     options.Password.RequiredLength = 6;
 
 }).AddEntityFrameworkStores<ApplicationDbContext>();
+
+builder.Services.AddMvc(options =>
+{
+    var policy = new AuthorizationPolicyBuilder()
+    .RequireAuthenticatedUser()
+    .Build();
+    options.Filters.Add(new AuthorizeFilter(policy));
+}).AddXmlSerializerFormatters();
+
+builder.Services.AddAuthentication()
+         .AddCookie(options =>
+         {
+             options.LoginPath = "/signin";
+             options.LogoutPath = "/signin";
+         });
 
 var app = builder.Build();
 
