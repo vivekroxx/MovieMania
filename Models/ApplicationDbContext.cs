@@ -11,11 +11,12 @@ namespace MovieMania.Models
         }
 
         public virtual DbSet<MovieModel> Movies { get; set; }
+        public virtual DbSet<ApplicationUser> AppUsers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Seed();
+            //modelBuilder.Seed();
         }
     }
 }
