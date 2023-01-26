@@ -24,13 +24,6 @@ builder.Services.AddMvc(options =>
     options.Filters.Add(new AuthorizeFilter(policy));
 }).AddXmlSerializerFormatters();
 
-builder.Services.AddAuthentication()
-         .AddCookie(options =>
-         {
-             options.LoginPath = "/signin";
-             options.LogoutPath = "/signin";
-         });
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

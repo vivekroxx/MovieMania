@@ -39,6 +39,7 @@ namespace MovieMania.Controllers
                     Description = model.Description,
                     Duration = new TimeSpan(model.Duration.Hours, model.Duration.Minutes, 0),
                     ReleaseDate = model.ReleaseDate,
+                    CreatedBy = User.Identity.Name
                 };
 
                 _db.Add(newMovie);

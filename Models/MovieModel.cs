@@ -13,6 +13,7 @@ namespace MovieMania.Models
         public DateTime ReleaseDate { get; set; }
         public TimeSpan Duration { get; set; }
         public string? PhotoName { get; set; }
+        public string CreatedBy { get; set; }
     }
 
     public class MovieCreateViewModel
