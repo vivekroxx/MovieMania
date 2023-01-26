@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using MovieMania.Models;
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
@@ -39,6 +40,7 @@ namespace MovieMania.Controllers
                     Description = model.Description,
                     Duration = new TimeSpan(model.Duration.Hours, model.Duration.Minutes, 0),
                     ReleaseDate = model.ReleaseDate,
+                    CreatedBy = User.Identity.Name
                 };
 
                 _db.Add(newMovie);
@@ -46,7 +48,7 @@ namespace MovieMania.Controllers
             }
             else
             {
-                return View();
+                return View(model);
             }
 
             return RedirectToAction(nameof(HomeController.Index), "Home");
@@ -106,6 +108,10 @@ namespace MovieMania.Controllers
                     _db.SaveChanges();
                 }
             }
+            else
+            {
+                return View(model);
+            }
 
             return RedirectToAction(nameof(HomeController.Index), "Home");
         }
@@ -159,5 +165,14 @@ namespace MovieMania.Controllers
 
             return View();
         }
+
+        private void AddErrors(IdentityResult result)
+        {
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+        }
+
     }
 }

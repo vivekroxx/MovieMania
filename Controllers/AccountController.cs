@@ -41,19 +41,17 @@ namespace MovieMania.Controllers
                 {
                     if (!String.IsNullOrEmpty(returnUrl))
                     {
-                        return LocalRedirect(returnUrl);
-                    }
-                    else
-                    {
-                        return RedirectToAction(nameof(HomeController.Index), "Home");
+                        RedirectToLocal(returnUrl);
                     }
                 }
             }
             else
             {
-                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                ModelState.AddModelError(string.Empty, "Invalid Email or Password.");
                 return View(model);
             }
+
+            ModelState.AddModelError(string.Empty, "Invalid Email or Password.");
             return View(model);
         }
 
@@ -61,6 +59,11 @@ namespace MovieMania.Controllers
         [AllowAnonymous]
         public IActionResult Register()
         {
+            if (_signInManager.IsSignedIn(User))
+            {
+                return RedirectToAction(nameof(HomeController.Index), "Home");
+            }
+
             return View();
         }
 
@@ -89,7 +92,7 @@ namespace MovieMania.Controllers
                 AddErrors(result);
             }
 
-            return View();
+            return View(model);
         }
 
         [HttpGet]
@@ -128,6 +131,18 @@ namespace MovieMania.Controllers
         [AllowAnonymous]
         public IActionResult ForgotPassword()
         {
+            if (_signInManager.IsSignedIn(User))
+            {
+                return RedirectToAction(nameof(HomeController.Index), "Home");
+            }
+
+            return View();
+        }
+
+        [HttpPost("/forgot-password")]
+        [AllowAnonymous]
+        public IActionResult ForgotPassword(ForgotPasswordViewModel model)
+        {
             return View();
         }
 
@@ -153,7 +168,7 @@ namespace MovieMania.Controllers
         {
             if (Url.IsLocalUrl(returnUrl))
             {
-                return Redirect(returnUrl);
+                return LocalRedirect(returnUrl);
             }
             else
             {

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace MovieMania.Models
@@ -11,12 +12,12 @@ namespace MovieMania.Models
         }
 
         public virtual DbSet<MovieModel> Movies { get; set; }
-        public virtual DbSet<ApplicationUser> AppUsers { get; set; }
+        public virtual DbSet<ApplicationUser> User { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            //modelBuilder.Seed();
+            modelBuilder.Seed();
         }
     }
 }

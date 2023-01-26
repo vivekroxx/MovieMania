@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace MovieMania.Models
 {
@@ -6,15 +7,10 @@ namespace MovieMania.Models
     {
         public static void Seed(this ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<RegistorViewModel>().HasData(
-                new RegistorViewModel()
-                {
-                    Id = 1,
-                    Name = "Admin",
-                    Email = "admin@gmail.com",
-                    Password = "123456",
-                    Role = UserRole.Admin
-                });
+            modelBuilder.Entity<IdentityRole>().HasData(
+                 new IdentityRole { Name = "Admin", NormalizedName = "ADMIN" },
+                 new IdentityRole { Name = "User", NormalizedName = "USER" }
+             );
         }
     }
 }

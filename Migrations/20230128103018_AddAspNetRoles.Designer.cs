@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MovieMania.Models;
 
@@ -11,9 +12,11 @@ using MovieMania.Models;
 namespace MovieMania.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230128103018_AddAspNetRoles")]
+    partial class AddAspNetRoles
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,15 +54,15 @@ namespace MovieMania.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "ee08cc35-dcba-4d3d-9c29-ce707de41e9a",
-                            ConcurrencyStamp = "0326b80f-8049-42a9-b64e-a2cd048089d5",
+                            Id = "38bae53e-e90d-471f-8c8c-edcb1c14385a",
+                            ConcurrencyStamp = "019f1df6-10cc-421a-811e-9d53fef77790",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "8e1503da-3eb0-4a6e-a0ea-a3b33efaf77d",
-                            ConcurrencyStamp = "694fffbd-b62d-4007-84e4-54526170468f",
+                            Id = "6dde6d9d-bb59-4996-95d5-1f3503a127fa",
+                            ConcurrencyStamp = "34b1bdd8-af81-4185-823c-57088794037a",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -100,10 +103,6 @@ namespace MovieMania.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
@@ -157,10 +156,6 @@ namespace MovieMania.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUser");
-
-                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -278,20 +273,6 @@ namespace MovieMania.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Movies");
-                });
-
-            modelBuilder.Entity("MovieMania.Models.ApplicationUser", b =>
-                {
-                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Role")
-                        .HasColumnType("int");
-
-                    b.HasDiscriminator().HasValue("ApplicationUser");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

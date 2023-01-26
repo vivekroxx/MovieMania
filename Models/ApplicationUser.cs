@@ -5,10 +5,8 @@ namespace MovieMania.Models
 {
     public class ApplicationUser : IdentityUser
     {
-        [Key]
-        public int Id { get; set; }
         [Required]
-        public string Name { get; set; }
-        public UserRole Role { get; set; }
+        public string? Name { get; set; }
+        public UserRoleType Role { get; set; }
     }
 }

@@ -1,8 +1,12 @@
-﻿namespace MovieMania.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace MovieMania.Models
 {
-    public enum UserRole
+    public enum UserRoleType
     {
-        User = 0,
-        Admin = 1
+        [Display(Name = "Administration")]
+        Admin = 0,
+        [Display(Name = "Normal User")]
+        User = 1
     }
 }

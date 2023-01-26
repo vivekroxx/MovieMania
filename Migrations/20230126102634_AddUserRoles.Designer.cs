@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MovieMania.Models;
 
@@ -11,9 +12,11 @@ using MovieMania.Models;
 namespace MovieMania.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230126102634_AddUserRoles")]
+    partial class AddUserRoles
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,17 +54,17 @@ namespace MovieMania.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "ee08cc35-dcba-4d3d-9c29-ce707de41e9a",
-                            ConcurrencyStamp = "0326b80f-8049-42a9-b64e-a2cd048089d5",
+                            Id = "86c81eda-eb69-432b-a9fc-0c595ef0f204",
+                            ConcurrencyStamp = "107114fd-d18c-40e6-b43d-652bced43f6c",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "8e1503da-3eb0-4a6e-a0ea-a3b33efaf77d",
-                            ConcurrencyStamp = "694fffbd-b62d-4007-84e4-54526170468f",
-                            Name = "User",
-                            NormalizedName = "USER"
+                            Id = "ba1935e4-5900-42d0-91fa-1ac9d0685931",
+                            ConcurrencyStamp = "a49d47e9-28de-41a5-b565-ee314a8b22eb",
+                            Name = "Moderator",
+                            NormalizedName = "MODERATOR"
                         });
                 });
 
@@ -253,10 +256,6 @@ namespace MovieMania.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Author")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
