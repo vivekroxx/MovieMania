@@ -1,5 +1,4 @@
-﻿using MediatR;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MovieMania.Models;
@@ -77,7 +76,7 @@ namespace MovieMania.Controllers
                     UserName = model.Email,
                     Email = model.Email,
                     Name = model.Name,
-                    Role= model.Role
+                    Role = model.Role
                 };
 
                 var result = await _userManager.CreateAsync(user, model.Password);

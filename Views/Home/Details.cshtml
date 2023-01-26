@@ -14,8 +14,8 @@
             <div class="col-md-4">
                 <h5 class="card-title"><span>Movie</span> : @Model.Name</h5>
                 <h5 class="card-title">Author : @Model.Author</h5>
-                <h5 class="card-title">Movie Duration : @Model.Duration</h5>
-                <h5 class="card-title">Release Date : @Model.ReleaseDate</h5>
+                <h5 class="card-title">Movie Duration : @Model.Duration.Hours Hours,  @Model.Duration.Minutes Minutes</h5>
+                <h5 class="card-title">Release Date : @Model.ReleaseDate.Date.ToString("dd MMMM, yyyy")</h5>
                 <div class="mt-auto">
                     <a href="#" class="btn btn-warning d-block my-1">Add to Favourite</a>
                     <a asp-controller="Movie" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-success d-block my-1">Edit</a>

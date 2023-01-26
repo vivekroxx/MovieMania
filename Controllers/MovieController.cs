@@ -37,7 +37,7 @@ namespace MovieMania.Controllers
                     PhotoName = uniqueFileName,
                     Author = model.Author,
                     Description = model.Description,
-                    Duration = model.Duration,
+                    Duration = new TimeSpan(model.Duration.Hours, model.Duration.Minutes, 0),
                     ReleaseDate = model.ReleaseDate,
                 };
 
@@ -68,7 +68,8 @@ namespace MovieMania.Controllers
                 Name = movie.Name,
                 Author = movie.Author,
                 Description = movie.Description,
-                Duration = movie.Duration,
+                Hours = movie.Duration.Hours,
+                Minutes = movie.Duration.Minutes,
                 ReleaseDate = movie.ReleaseDate,
                 ExistingPhotoPath = movie.PhotoName
             };
@@ -88,7 +89,7 @@ namespace MovieMania.Controllers
                     movie.Name = model.Name;
                     movie.Author = model.Author;
                     movie.Description = model.Description;
-                    movie.Duration = model.Duration;
+                    movie.Duration = new TimeSpan(model.Duration.Hours, model.Duration.Minutes, 0);
                     movie.ReleaseDate = model.ReleaseDate;
                     movie.PhotoName = ProcessUploadFile(model);
 
