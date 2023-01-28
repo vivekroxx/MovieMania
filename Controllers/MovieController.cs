@@ -10,13 +10,11 @@ namespace MovieMania.Controllers
     {
         private readonly ApplicationDbContext _db;
         private readonly IWebHostEnvironment _Environment;
-        private readonly UserManager<ApplicationUser> _userManager;
 
-        public MovieController(ApplicationDbContext db, IWebHostEnvironment hostingEnvironment, UserManager<ApplicationUser> userManager)
+        public MovieController(ApplicationDbContext db, IWebHostEnvironment hostingEnvironment)
         {
             _db = db;
             _Environment = hostingEnvironment;
-            _userManager = userManager;
         }
 
         [HttpGet]
