@@ -18,10 +18,15 @@
                 <h5 class="card-title">Release Date : @Model.ReleaseDate.Date.ToString("dd MMMM, yyyy")</h5>
                 <div class="mt-auto">
                     <a href="#" class="btn btn-warning d-block my-1">Add to Favourite</a>
-                    <a asp-controller="Movie" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-success d-block my-1">Edit</a>
-                    <form asp-controller="Movie" asp-action="Delete" asp-route-id="@Model.Id" method="post">
-                        <button type="submit" class="btn btn-danger d-block my-1 w-100">Delete</button>
-                    </form>
+
+                    @if (User.IsInRole(UserRoleType.Admin.ToString()))
+                    {
+                        <a asp-controller="Movie" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-success d-block my-1">Edit</a>
+                        <form asp-controller="Movie" asp-action="Delete" asp-route-id="@Model.Id" method="post">
+                            <button type="submit" class="btn btn-danger d-block my-1 w-100">Delete</button>
+                        </form>
+                    }
+
                     <a asp-controller="Home" asp-action="Index" class="btn btn-secondary d-block my-1">Go Back</a>
                 </div>
             </div>

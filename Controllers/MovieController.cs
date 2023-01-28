@@ -1,22 +1,18 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MovieMania.Models;
-using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
 namespace MovieMania.Controllers
 {
     public class MovieController : Controller
     {
         private readonly ApplicationDbContext _db;
-        [Obsolete]
-        private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly IWebHostEnvironment _Environment;
 
-        [Obsolete]
-        public MovieController(ApplicationDbContext db, IHostingEnvironment hostingEnvironment)
+        public MovieController(ApplicationDbContext db, IWebHostEnvironment hostingEnvironment)
         {
             _db = db;
-            _hostingEnvironment = hostingEnvironment;
-
+            _Environment = hostingEnvironment;
         }
 
         [HttpGet]
@@ -26,7 +22,7 @@ namespace MovieMania.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(MovieCreateViewModel model)
+        public IActionResult Create(MovieEditViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -38,9 +34,9 @@ namespace MovieMania.Controllers
                     PhotoName = uniqueFileName,
                     Author = model.Author,
                     Description = model.Description,
-                    Duration = new TimeSpan(model.Duration.Hours, model.Duration.Minutes, 0),
+                    Duration = new TimeSpan(model.Hours, model.Minutes, 0),
                     ReleaseDate = model.ReleaseDate,
-                    CreatedBy = User.Identity.Name
+                    CreatedBy = User.Identity?.Name
                 };
 
                 _db.Add(newMovie);
@@ -91,13 +87,13 @@ namespace MovieMania.Controllers
                     movie.Name = model.Name;
                     movie.Author = model.Author;
                     movie.Description = model.Description;
-                    movie.Duration = new TimeSpan(model.Duration.Hours, model.Duration.Minutes, 0);
+                    movie.Duration = new TimeSpan(model.Hours, model.Minutes, 0);
                     movie.ReleaseDate = model.ReleaseDate;
                     movie.PhotoName = ProcessUploadFile(model);
 
                     if (model.Photo != null && !string.IsNullOrWhiteSpace(model.ExistingPhotoPath))
                     {
-                        string filePath = Path.Combine(_hostingEnvironment.WebRootPath, "image", model.ExistingPhotoPath);
+                        string filePath = Path.Combine(_Environment.WebRootPath, "image", model.ExistingPhotoPath);
                         if (System.IO.File.Exists(filePath))
                         {
                             System.IO.File.Delete(filePath);
@@ -116,18 +112,20 @@ namespace MovieMania.Controllers
             return RedirectToAction(nameof(HomeController.Index), "Home");
         }
 
-        private string ProcessUploadFile(MovieCreateViewModel model)
+        private string ProcessUploadFile(MovieEditViewModel model)
         {
-            string uniqueFileName = null;
+            string uniqueFileName = string.Empty;
             if (model.Photo != null)
             {
-                string uploadsFolder = Path.Combine(_hostingEnvironment.WebRootPath, "image");
+                string uploadsFolder = Path.Combine(_Environment.WebRootPath, "image");
                 uniqueFileName = Guid.NewGuid().ToString() + "_" + model.Photo.FileName;
                 string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                using (var fileStream = new FileStream(filePath, FileMode.Create))
-                {
-                    model.Photo.CopyTo(fileStream);
-                }
+                using var fileStream = new FileStream(filePath, FileMode.Create);
+                model.Photo.CopyTo(fileStream);
+            }
+            else
+            {
+                uniqueFileName = model.ExistingPhotoPath ?? "";
             }
 
             return uniqueFileName;
@@ -143,7 +141,7 @@ namespace MovieMania.Controllers
             }
             if (!String.IsNullOrWhiteSpace(movie.PhotoName))
             {
-                var filePath = Path.Combine(_hostingEnvironment.WebRootPath, "image", movie.PhotoName);
+                var filePath = Path.Combine(_Environment.WebRootPath, "image", movie.PhotoName);
                 if (System.IO.File.Exists(filePath))
                 {
                     System.IO.File.Delete(filePath);

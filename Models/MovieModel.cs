@@ -13,7 +13,7 @@ namespace MovieMania.Models
         public DateTime ReleaseDate { get; set; }
         public TimeSpan Duration { get; set; }
         public string? PhotoName { get; set; }
-        public string CreatedBy { get; set; }
+        public string? CreatedBy { get; set; }
     }
 
     public class MovieCreateViewModel
@@ -26,7 +26,7 @@ namespace MovieMania.Models
         public DateTime ReleaseDate { get; set; }
         public int Hours { get; set; }
         public int Minutes { get; set; }
-        public virtual MovieDuration Duration { get; set; }
+        public virtual MovieDuration? Duration { get; set; }
         public IFormFile? Photo { get; set; }
     }
 
