@@ -5,6 +5,7 @@ using MovieMania.Models;
 
 namespace MovieMania.Controllers
 {
+    [Route("/[action]")]
     public class AccountController : Controller
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
