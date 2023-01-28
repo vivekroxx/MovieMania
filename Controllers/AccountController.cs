@@ -26,32 +26,39 @@ namespace MovieMania.Controllers
         [AllowAnonymous]
         public IActionResult Login()
         {
+            if (_signInManager.IsSignedIn(User))
+            {
+                return RedirectToAction(nameof(HomeController.Index), "Home");
+            }
+
             return View();
         }
 
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginViewModel model, string returnUrl)
+        public async Task<IActionResult> Login(LoginViewModel model, string? returnUrl)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
-                    if (!String.IsNullOrEmpty(returnUrl))
+                    if (!String.IsNullOrEmpty(returnUrl))   
                     {
-                        RedirectToLocal(returnUrl);
+                        return RedirectToLocal(returnUrl);
+                    }
+                    else
+                    {
+                        return RedirectToAction(nameof(HomeController.Index), "Home");
                     }
                 }
             }
             else
             {
                 ModelState.AddModelError(string.Empty, "Invalid Email or Password.");
-                return View(model);
             }
 
-            ModelState.AddModelError(string.Empty, "Invalid Email or Password.");
             return View(model);
         }
 
@@ -85,6 +92,7 @@ namespace MovieMania.Controllers
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    await _userManager.AddToRoleAsync(user, model.Role.ToString());
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     return RedirectToAction(nameof(HomeController.Index), "Home");
                 }

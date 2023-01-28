@@ -15,7 +15,7 @@ namespace MovieMania.Controllers
 
         public IActionResult Index()
         {
-            var movieList = _db.Movies.Where(x => x.CreatedBy == User.Identity.Name).ToList();
+            var movieList = _db.Movies.ToList();
 
             return View(movieList);
         }

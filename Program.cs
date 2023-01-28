@@ -13,8 +13,9 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
     options.Password.RequiredUniqueChars = 1;
     options.Password.RequiredLength = 6;
-
-}).AddEntityFrameworkStores<ApplicationDbContext>();
+})
+.AddEntityFrameworkStores<ApplicationDbContext>()
+.AddDefaultTokenProviders();
 
 builder.Services.AddMvc(options =>
 {
