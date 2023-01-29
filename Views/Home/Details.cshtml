@@ -17,7 +17,10 @@
                 <h5 class="card-title">Movie Duration : @Model.Duration.Hours @(Model.Duration.Hours > 1 ? "Hours" : "Hour"), @Model.Duration.Minutes @(Model.Duration.Minutes > 1 ? "Minutes" : "Minute")</h5>
                 <h5 class="card-title">Release Date : @Model.ReleaseDate.Date.ToString("dd MMMM, yyyy")</h5>
                 <div class="mt-auto">
-                    <a href="#" class="btn btn-warning d-block my-1">Add to Favourite</a>
+
+                    <form asp-controller="Movie" asp-action="AddToFavorite" method="post">
+                        <button class="btn btn-sm btn-success text-white my-1 d-block w-100" type="submit" asp-route-movieId="@Model.Id">Add to Favorite</button>
+                    </form>
 
                     @if (User.IsInRole(UserRoleType.Admin.ToString()))
                     {

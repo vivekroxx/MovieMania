@@ -5,16 +5,20 @@ using MovieMania.Models;
 
 namespace MovieMania.Controllers
 {
-    [Route("/[action]")]
+    //[Route("/[action]")]
     public class AccountController : Controller
     {
+        private readonly ApplicationDbContext _db;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RoleManager<ApplicationRole> _roleManager;
 
-        public AccountController(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
+        public AccountController(ApplicationDbContext db, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager)
         {
+            _db = db;
             _signInManager = signInManager;
             _userManager = userManager;
+            _roleManager = roleManager;
         }
 
         [AllowAnonymous]
@@ -45,7 +49,7 @@ namespace MovieMania.Controllers
                 var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
-                    if (!String.IsNullOrEmpty(returnUrl))   
+                    if (!String.IsNullOrEmpty(returnUrl))
                     {
                         return RedirectToLocal(returnUrl);
                     }
@@ -53,6 +57,10 @@ namespace MovieMania.Controllers
                     {
                         return RedirectToAction(nameof(HomeController.Index), "Home");
                     }
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Invalid Email or Password.");
                 }
             }
             else
@@ -93,7 +101,10 @@ namespace MovieMania.Controllers
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    await _userManager.AddToRoleAsync(user, model.Role.ToString());
+                    if (await _roleManager.RoleExistsAsync(model.Role.ToString()))
+                    {
+                        await _userManager.AddToRoleAsync(user, model.Role.ToString());
+                    }
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     return RedirectToAction(nameof(HomeController.Index), "Home");
                 }

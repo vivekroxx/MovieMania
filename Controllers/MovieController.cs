@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Azure.Core;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MovieMania.Models;
@@ -10,11 +11,13 @@ namespace MovieMania.Controllers
     {
         private readonly ApplicationDbContext _db;
         private readonly IWebHostEnvironment _Environment;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public MovieController(ApplicationDbContext db, IWebHostEnvironment hostingEnvironment)
+        public MovieController(ApplicationDbContext db, IWebHostEnvironment hostingEnvironment, UserManager<ApplicationUser> userManager)
         {
             _db = db;
             _Environment = hostingEnvironment;
+            _userManager = userManager;
         }
 
         [HttpGet]
@@ -158,13 +161,32 @@ namespace MovieMania.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddToFavorite(int Id)
+        public async Task<IActionResult> AddToFavorite(int movieId)
         {
-            if (ModelState.IsValid)
+            var user = await _userManager.GetUserAsync(User);
+            var favoriteMovie = new FavoriteMovieModel
             {
-            }
+                UserId = user.Id,
+                MovieId = movieId
+            };
 
-            return View();
+            _db.FavoriteMovie.Add(favoriteMovie);
+            _db.SaveChanges();
+            return Ok();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RemoveFromFavorite(int movieId)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var favorite = _db.FavoriteMovie.FirstOrDefault(x => x.MovieId == movieId && x.UserId == user.Id);
+
+            if (favorite != null)
+            {
+                _db.FavoriteMovie.Remove(favorite);
+                _db.SaveChanges();
+            }
+            return Ok();
         }
 
         private void AddErrors(IdentityResult result)
