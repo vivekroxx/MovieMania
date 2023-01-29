@@ -16,7 +16,7 @@ namespace MovieMania.Models
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
         [DataType(DataType.Password)]
         public string Password { get; set; }
-        public UserRole Role { get; set; }
+        public UserRoleType Role { get; set; }
     }
 
     public class UserCreateViewModel
@@ -39,8 +39,8 @@ namespace MovieMania.Models
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
-        //[Required]
-        //[Display(Name = "User Role")]
-        //public UserRole Role { get; set; }
+        [Required]
+        [Display(Name = "User Role")]
+        public UserRoleType Role { get; set; }
     }
 }
