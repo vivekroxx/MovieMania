@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MovieMania.Models;
 
@@ -11,9 +12,11 @@ using MovieMania.Models;
 namespace MovieMania.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230128104448_AddApplicationUserDbSet")]
+    partial class AddApplicationUserDbSet
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,15 +54,15 @@ namespace MovieMania.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "30f5cc8e-ba5f-4c9f-9f36-71de4d14053d",
-                            ConcurrencyStamp = "538ece64-824f-46fb-8b33-594dbcdec514",
+                            Id = "ee08cc35-dcba-4d3d-9c29-ce707de41e9a",
+                            ConcurrencyStamp = "0326b80f-8049-42a9-b64e-a2cd048089d5",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "dae04e7c-3571-4e67-888e-985b995de016",
-                            ConcurrencyStamp = "780f39dc-b18f-4bae-88d1-b61a5d88b8cc",
+                            Id = "8e1503da-3eb0-4a6e-a0ea-a3b33efaf77d",
+                            ConcurrencyStamp = "694fffbd-b62d-4007-84e4-54526170468f",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -256,10 +259,8 @@ namespace MovieMania.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CreatedBy")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -279,7 +280,7 @@ namespace MovieMania.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Movies", (string)null);
+                    b.ToTable("Movies");
                 });
 
             modelBuilder.Entity("MovieMania.Models.ApplicationUser", b =>

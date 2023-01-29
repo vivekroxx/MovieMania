@@ -32,11 +32,11 @@
                 <input type="password" class="form-control" asp-for="ConfirmPassword" />
                 <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
             </div>
-          @*  <div class="form-group mb-2">
+            <div class="form-group mb-2">
                 <label asp-for="Role"></label>
-                <select asp-for="Role" asp-items="Html.GetEnumSelectList<UserRole>()" class="form-select"></select>
+                <select asp-for="Role" asp-items="Html.GetEnumSelectList<UserRoleType>()" class="form-select"></select>
                 <span asp-validation-for="Role" class="text-danger"></span>
-            </div>*@
+            </div>
             <button type="submit" class="btn btn-primary btn-block mt-4 w-100">Register</button>
         </form>
 

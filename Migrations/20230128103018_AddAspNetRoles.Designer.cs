@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MovieMania.Models;
 
@@ -11,9 +12,11 @@ using MovieMania.Models;
 namespace MovieMania.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230128103018_AddAspNetRoles")]
+    partial class AddAspNetRoles
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,15 +54,15 @@ namespace MovieMania.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "30f5cc8e-ba5f-4c9f-9f36-71de4d14053d",
-                            ConcurrencyStamp = "538ece64-824f-46fb-8b33-594dbcdec514",
+                            Id = "38bae53e-e90d-471f-8c8c-edcb1c14385a",
+                            ConcurrencyStamp = "019f1df6-10cc-421a-811e-9d53fef77790",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "dae04e7c-3571-4e67-888e-985b995de016",
-                            ConcurrencyStamp = "780f39dc-b18f-4bae-88d1-b61a5d88b8cc",
+                            Id = "6dde6d9d-bb59-4996-95d5-1f3503a127fa",
+                            ConcurrencyStamp = "34b1bdd8-af81-4185-823c-57088794037a",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -100,10 +103,6 @@ namespace MovieMania.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
@@ -157,10 +156,6 @@ namespace MovieMania.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUser");
-
-                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -256,10 +251,8 @@ namespace MovieMania.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CreatedBy")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -279,21 +272,7 @@ namespace MovieMania.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Movies", (string)null);
-                });
-
-            modelBuilder.Entity("MovieMania.Models.ApplicationUser", b =>
-                {
-                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Role")
-                        .HasColumnType("int");
-
-                    b.HasDiscriminator().HasValue("ApplicationUser");
+                    b.ToTable("Movies");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

@@ -1,17 +1,17 @@
-﻿using MediatR;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MovieMania.Models;
 
 namespace MovieMania.Controllers
 {
+    [Route("/[action]")]
     public class AccountController : Controller
     {
-        private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public AccountController(SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager)
+        public AccountController(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
         {
             _signInManager = signInManager;
             _userManager = userManager;
@@ -27,22 +27,27 @@ namespace MovieMania.Controllers
         [AllowAnonymous]
         public IActionResult Login()
         {
+            if (_signInManager.IsSignedIn(User))
+            {
+                return RedirectToAction(nameof(HomeController.Index), "Home");
+            }
+
             return View();
         }
 
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginViewModel model, string returnUrl)
+        public async Task<IActionResult> Login(LoginViewModel model, string? returnUrl)
         {
             if (ModelState.IsValid)
             {
                 var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
-                    if (!String.IsNullOrEmpty(returnUrl))
+                    if (!String.IsNullOrEmpty(returnUrl))   
                     {
-                        return LocalRedirect(returnUrl);
+                        return RedirectToLocal(returnUrl);
                     }
                     else
                     {
@@ -52,9 +57,9 @@ namespace MovieMania.Controllers
             }
             else
             {
-                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                return View(model);
+                ModelState.AddModelError(string.Empty, "Invalid Email or Password.");
             }
+
             return View(model);
         }
 
@@ -62,6 +67,11 @@ namespace MovieMania.Controllers
         [AllowAnonymous]
         public IActionResult Register()
         {
+            if (_signInManager.IsSignedIn(User))
+            {
+                return RedirectToAction(nameof(HomeController.Index), "Home");
+            }
+
             return View();
         }
 
@@ -72,15 +82,18 @@ namespace MovieMania.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new IdentityUser
+                var user = new ApplicationUser
                 {
                     UserName = model.Email,
-                    Email = model.Email
+                    Email = model.Email,
+                    Name = model.Name,
+                    Role = model.Role
                 };
 
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    await _userManager.AddToRoleAsync(user, model.Role.ToString());
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     return RedirectToAction(nameof(HomeController.Index), "Home");
                 }
@@ -88,7 +101,7 @@ namespace MovieMania.Controllers
                 AddErrors(result);
             }
 
-            return View();
+            return View(model);
         }
 
         [HttpGet]
@@ -127,6 +140,18 @@ namespace MovieMania.Controllers
         [AllowAnonymous]
         public IActionResult ForgotPassword()
         {
+            if (_signInManager.IsSignedIn(User))
+            {
+                return RedirectToAction(nameof(HomeController.Index), "Home");
+            }
+
+            return View();
+        }
+
+        [HttpPost("/forgot-password")]
+        [AllowAnonymous]
+        public IActionResult ForgotPassword(ForgotPasswordViewModel model)
+        {
             return View();
         }
 
@@ -152,7 +177,7 @@ namespace MovieMania.Controllers
         {
             if (Url.IsLocalUrl(returnUrl))
             {
-                return Redirect(returnUrl);
+                return LocalRedirect(returnUrl);
             }
             else
             {
