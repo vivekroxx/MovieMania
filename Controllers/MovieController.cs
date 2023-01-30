@@ -197,13 +197,6 @@ namespace MovieMania.Controllers
             return Ok();
         }
 
-        [HttpGet]
-        public IActionResult GetFavorites(int userId)
-        {
-            var favorites = _db.Movies.Where(x => x.Id == userId).ToList();
-            return View(favorites);
-        }
-
         private void AddErrors(IdentityResult result)
         {
             foreach (var error in result.Errors)

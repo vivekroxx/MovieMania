@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MovieMania.Models;
 using System.Diagnostics;
 
 namespace MovieMania.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ApplicationDbContext _db;
@@ -62,6 +64,39 @@ namespace MovieMania.Controllers
             model.isFavorite = isFavorite;
 
             return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> FavoriteMovies(MovieViewModel model)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var movieList = _db.Movies.Where(x => x.Id == user.Id).ToList();
+            List<MovieViewModel> movies = new();
+
+            if (movieList.Any())
+            {
+                foreach (var movie in movieList)
+                {
+                    var isFavorite = _db.FavoriteMovie.Where(x => x.MovieId == movie.Id && x.UserId == user.Id).Any();
+
+                    model.Id = movie.Id;
+                    model.Name = movie.Name;
+                    model.Description = movie.Description;
+                    model.isFavorite = isFavorite;
+                    model.Author = movie.Author;
+                    model.Duration = movie.Duration;
+                    model.CreatedOn = movie.CreatedOn;
+                    model.CreatedBy = movie.CreatedBy;
+                    model.PhotoName = movie.PhotoName;
+                    model.ReleaseDate = movie.ReleaseDate;
+
+                    movies.Add(model);
+                }
+            }
+
+            var favoriteMovieList = movies.Where(x => x.isFavorite == true);
+
+            return View(favoriteMovieList);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

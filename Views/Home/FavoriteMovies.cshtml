@@ -1,0 +1,41 @@
+﻿@model IEnumerable<MovieViewModel>
+@{
+    ViewData["Title"] = "Favorite Movies";
+}
+
+<div class="row">
+
+    @if (Model.Any())
+    {
+        @foreach (var item in Model)
+        {
+            var photoPath = "~/image/" + (!String.IsNullOrWhiteSpace(@item.PhotoName) ? @item.PhotoName : "noimage.webp");
+            <div class="card col-3 m-2 p-0 overflow-hidden box-shadow" style="width: 12rem;">
+                <img class="img-fluid" style="object-fit:cover; height: 200px; aspect-ratio: 1/1;" src="@photoPath" asp-append-version="true">
+                <div class="card-body m-0 px-2 py-0">
+                    <h6 class="fs-5 m-0">@item.Name</h6>
+                    <p class="fs-6 m-0 text-muted">@item.Author</p>
+                </div>
+                <div class="card-footer m-0">
+
+                    @if (item.isFavorite)
+                    {
+                        <button class="remove-from-favorites-button btn btn-sm btn-secondary text-white my-1 d-block w-100" type="submit" value="@item.Id">Remove from Favorite</button>
+                    }
+                    else
+                    {
+                        <button class="add-to-favorites-button btn btn-sm btn-success text-white my-1 d-block w-100" type="submit" value="@item.Id">Add to Favorite</button>
+                    }
+
+                    <a asp-controller="Home" asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-primary d-block">View Details</a>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="text-center">
+            No Movies to show at this moment.
+        </div>
+    }
+</div>
