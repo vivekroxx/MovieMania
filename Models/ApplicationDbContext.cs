@@ -18,17 +18,6 @@ namespace MovieMania.Models
         {
             base.OnModelCreating(builder);
             builder.Seed();
-
-            //builder.Entity<CustomUser>(b =>
-            //{
-            //    b.HasKey(u => u.Id);
-            //    b.HasOne(u => u.User)
-            //        .WithOne(u => u.CustomUser)
-            //        .HasForeignKey<CustomUser>(p => p.Id)
-            //        .IsRequired();
-            //    b.Property(p => p.Id)
-            //        .ValueGeneratedNever();
-            //});
         }
     }
 }

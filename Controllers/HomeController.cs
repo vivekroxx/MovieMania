@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using MovieMania.Models;
 using System.Diagnostics;
 
@@ -7,17 +8,40 @@ namespace MovieMania.Controllers
     public class HomeController : Controller
     {
         private readonly ApplicationDbContext _db;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public HomeController(ApplicationDbContext db)
+        public HomeController(ApplicationDbContext db, UserManager<ApplicationUser> userManager)
         {
             _db = db;
+            _userManager = userManager;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index(MovieViewModel model)
         {
             var movieList = _db.Movies.ToList();
+            var user = await _userManager.GetUserAsync(User);
 
-            return View(movieList);
+            List< MovieViewModel> movies = new();
+
+            foreach (var movie in movieList)
+            {
+                var isFavorite = _db.FavoriteMovie.Where(x => x.MovieId == movie.Id && x.UserId == user.Id).Any();
+
+                model.Id= movie.Id;
+                model.Name= movie.Name;
+                model.Description= movie.Description;
+                model.isFavorite= isFavorite;
+                model.Author= movie.Author;
+                model.Duration= movie.Duration;
+                model.CreatedOn= movie.CreatedOn;
+                model.CreatedBy = movie.CreatedBy;
+                model.PhotoName= movie.PhotoName;
+                model.ReleaseDate= movie.ReleaseDate;
+
+                movies.Add(model);
+            }
+
+            return View(movies);
         }
 
         public IActionResult Details(int id)

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<MovieModel>
+﻿@model IEnumerable<MovieViewModel>
 @{
     ViewData["Title"] = "Home";
 }
@@ -18,9 +18,14 @@
                 </div>
                 <div class="card-footer m-0">
 
-                    <form asp-controller="Movie" asp-action="AddToFavorite" method="post">
-                        <button class="btn btn-sm btn-success text-white my-1 d-block w-100" type="submit" asp-route-movieId="@item.Id">Add to Favorite</button>
-                    </form>
+                    @if (item.isFavorite)
+                    {
+                        <button class="remove-from-favorites-button btn btn-sm btn-danger text-white my-1 d-block w-100" type="submit" value="@item.Id">Remove from Favorite</button>
+                    }
+                    else
+                    {
+                        <button class="add-to-favorites-button btn btn-sm btn-success text-white my-1 d-block w-100" type="submit" value="@item.Id">Add to Favorite</button>
+                    }
 
                     <a asp-controller="Home" asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-primary d-block">View Details</a>
                 </div>
