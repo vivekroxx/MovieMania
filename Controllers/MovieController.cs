@@ -160,22 +160,29 @@ namespace MovieMania.Controllers
             return RedirectToAction(nameof(HomeController.Index), "Home");
         }
 
-        [HttpPost]
+        [HttpPost("/Movie/AddToFavorite/{movieId}")]
         public async Task<IActionResult> AddToFavorite(int movieId)
         {
             var user = await _userManager.GetUserAsync(User);
-            var favoriteMovie = new FavoriteMovieModel
-            {
-                UserId = user.Id,
-                MovieId = movieId
-            };
 
-            _db.FavoriteMovie.Add(favoriteMovie);
-            _db.SaveChanges();
+            var isFavoriteMovieAlreadyExist = _db.FavoriteMovie.Where(x => x.MovieId == movieId && x.UserId == user.Id).Any();
+
+            if (!isFavoriteMovieAlreadyExist)
+            {
+                var favoriteMovie = new FavoriteMovieModel
+                {
+                    UserId = user.Id,
+                    MovieId = movieId
+                };
+
+                _db.FavoriteMovie.Add(favoriteMovie);
+                _db.SaveChanges();
+            }
+
             return Ok();
         }
 
-        [HttpPost]
+        [HttpPost("/Movie/RemoveFromFavorite/{movieId}")]
         public async Task<IActionResult> RemoveFromFavorite(int movieId)
         {
             var user = await _userManager.GetUserAsync(User);
@@ -186,7 +193,15 @@ namespace MovieMania.Controllers
                 _db.FavoriteMovie.Remove(favorite);
                 _db.SaveChanges();
             }
+
             return Ok();
+        }
+
+        [HttpGet]
+        public IActionResult GetFavorites(int userId)
+        {
+            var favorites = _db.Movies.Where(x => x.Id == userId).ToList();
+            return View(favorites);
         }
 
         private void AddErrors(IdentityResult result)

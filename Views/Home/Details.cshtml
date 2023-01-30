@@ -1,4 +1,4 @@
-﻿@model MovieModel
+﻿@model MovieViewModel
 @{
     ViewData["Title"] = "Movie Detail";
     var photoPath = "~/image/" + (!String.IsNullOrWhiteSpace(Model.PhotoName) ? Model.PhotoName : "noimage.webp");
@@ -18,13 +18,18 @@
                 <h5 class="card-title">Release Date : @Model.ReleaseDate.Date.ToString("dd MMMM, yyyy")</h5>
                 <div class="mt-auto">
 
-                    <form asp-controller="Movie" asp-action="AddToFavorite" method="post">
-                        <button class="btn btn-sm btn-success text-white my-1 d-block w-100" type="submit" asp-route-movieId="@Model.Id">Add to Favorite</button>
-                    </form>
+                    @if (Model.isFavorite)
+                    {
+                        <button class="remove-from-favorites-button btn btn-secondary text-white my-1 d-block w-100" type="submit" value="@Model.Id">Remove from Favorite</button>
+                    }
+                    else
+                    {
+                        <button class="add-to-favorites-button btn btn-success text-white my-1 d-block w-100" type="submit" value="@Model.Id">Add to Favorite</button>
+                    }
 
                     @if (User.IsInRole(UserRoleType.Admin.ToString()))
                     {
-                        <a asp-controller="Movie" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-success d-block my-1">Edit</a>
+                        <a asp-controller="Movie" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-success d-block my-1 w-100">Edit</a>
                         <form asp-controller="Movie" asp-action="Delete" asp-route-id="@Model.Id" method="post">
                             <button type="submit" class="btn btn-danger d-block my-1 w-100">Delete</button>
                         </form>

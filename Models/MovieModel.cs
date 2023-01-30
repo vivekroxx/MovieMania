@@ -17,6 +17,11 @@ namespace MovieMania.Models
         public DateTime CreatedOn { get; set; }
     }
 
+    public class MovieViewModel : MovieModel
+    {
+        public bool isFavorite { get; set; }
+    }
+
     public class MovieCreateViewModel
     {
         [Required]

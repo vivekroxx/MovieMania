@@ -12,7 +12,7 @@ builder.Services.AddDbContextPool<ApplicationDbContext>(x => x.UseSqlServer(buil
 builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
 {
     options.Password.RequiredUniqueChars = 1;
-    options.Password.RequiredLength = 6;
+    options.Password.RequiredLength = 4;
 })
 .AddEntityFrameworkStores<ApplicationDbContext>()
 .AddDefaultTokenProviders();
