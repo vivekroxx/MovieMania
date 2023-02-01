@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace MovieMania.Models
+﻿namespace MovieMania.Models
 {
     public enum UserRoleType
     {

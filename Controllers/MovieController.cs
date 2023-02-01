@@ -1,5 +1,4 @@
-﻿using Azure.Core;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MovieMania.Models;
@@ -46,7 +45,7 @@ namespace MovieMania.Controllers
                 };
 
                 _db.Add(newMovie);
-                _db.SaveChanges();
+                _db.SaveChangesAsync();
             }
             else
             {
@@ -115,12 +114,12 @@ namespace MovieMania.Controllers
                 return View(model);
             }
 
-            return RedirectToAction(nameof(HomeController.Index), "Home");
+            return RedirectToAction(nameof(HomeController.Details), "Home", new { id = model.Id });
         }
 
         private string ProcessUploadFile(MovieEditViewModel model)
         {
-            string uniqueFileName = string.Empty;
+            string uniqueFileName;
             if (model.Photo != null)
             {
                 string uploadsFolder = Path.Combine(_Environment.WebRootPath, "image");
@@ -204,6 +203,5 @@ namespace MovieMania.Controllers
                 ModelState.AddModelError(string.Empty, error.Description);
             }
         }
-
     }
 }

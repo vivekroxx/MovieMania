@@ -49,8 +49,8 @@ namespace MovieMania.Controllers
                 var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
-                    if (!String.IsNullOrEmpty(returnUrl))
-                    {
+                    if (!string.IsNullOrEmpty(returnUrl))
+                    {   
                         return RedirectToLocal(returnUrl);
                     }
                     else
@@ -58,16 +58,9 @@ namespace MovieMania.Controllers
                         return RedirectToAction(nameof(HomeController.Index), "Home");
                     }
                 }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, "Invalid Email or Password.");
-                }
-            }
-            else
-            {
-                ModelState.AddModelError(string.Empty, "Invalid Email or Password.");
             }
 
+            ModelState.AddModelError(string.Empty, "Invalid Email or Password.");
             return View(model);
         }
 
@@ -133,17 +126,19 @@ namespace MovieMania.Controllers
                     var result = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
                     if (result.Succeeded)
                     {
-                        ViewBag.Changed = true;
-                        return View();
+                        return RedirectToAction(nameof(HomeController.Index), "Home");
                     }
-
-                    AddErrors(result);
+                    else
+                    {
+                        AddErrors(result);
+                    }
                 }
                 else
                 {
                     ModelState.AddModelError(string.Empty, "User account was not found.");
                 }
             }
+
             return View(model);
         }
 
@@ -175,7 +170,6 @@ namespace MovieMania.Controllers
         }
 
         #region Helpers
-
         private void AddErrors(IdentityResult result)
         {
             foreach (var error in result.Errors)

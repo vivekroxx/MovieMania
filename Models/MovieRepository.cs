@@ -36,6 +36,7 @@ namespace MovieMania.Models
             await _db.Movies.AddAsync(movie);
             await _db.SaveChangesAsync();
         }
+
         public async Task Update(MovieModel movie)
         {
             _db.Movies.Update(movie);

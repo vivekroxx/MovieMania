@@ -15,7 +15,6 @@ $(".remove-from-favorites-button").on("click", function() {
     });
 });
 
-
 // JavaScript code to handle the "Add movie to favorites" button click
 $(".add-to-favorites-button").on("click", function () {
     var movieId = $(this).val();

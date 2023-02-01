@@ -34,7 +34,7 @@ namespace MovieMania.Controllers
                     model.Id = movie.Id;
                     model.Name = movie.Name;
                     model.Description = movie.Description;
-                    model.isFavorite = isFavorite;
+                    model.IsFavorite = isFavorite;
                     model.Author = movie.Author;
                     model.Duration = movie.Duration;
                     model.CreatedOn = movie.CreatedOn;
@@ -49,21 +49,16 @@ namespace MovieMania.Controllers
             return View(movies);
         }
 
-        public async Task<IActionResult> Details(MovieViewModel model)
+        public IActionResult Details(int id)
         {
-            var movie = _db.Movies.FirstOrDefault(x => x.Id == model.Id);
-            var user = await _userManager.GetUserAsync(User);
+            var movie = _db.Movies.FirstOrDefault(x => x.Id == id);
 
             if (movie == null)
             {
                 return View("NotFound");
             }
 
-            var isFavorite = _db.FavoriteMovie.Where(x => x.MovieId == movie.Id && x.UserId == user.Id).Any();
-
-            model.isFavorite = isFavorite;
-
-            return View(model);
+            return View(movie);
         }
 
         [HttpGet]
@@ -82,7 +77,7 @@ namespace MovieMania.Controllers
                     model.Id = movie.Id;
                     model.Name = movie.Name;
                     model.Description = movie.Description;
-                    model.isFavorite = isFavorite;
+                    model.IsFavorite = isFavorite;
                     model.Author = movie.Author;
                     model.Duration = movie.Duration;
                     model.CreatedOn = movie.CreatedOn;
@@ -94,7 +89,7 @@ namespace MovieMania.Controllers
                 }
             }
 
-            var favoriteMovieList = movies.Where(x => x.isFavorite == true);
+            var favoriteMovieList = movies.Where(x => x.IsFavorite == true);
 
             return View(favoriteMovieList);
         }

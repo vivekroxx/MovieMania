@@ -1,4 +1,4 @@
-﻿@model MovieViewModel
+﻿@model MovieModel
 @{
     ViewData["Title"] = "Movie Detail";
     var photoPath = "~/image/" + (!String.IsNullOrWhiteSpace(Model.PhotoName) ? Model.PhotoName : "noimage.webp");
@@ -18,7 +18,8 @@
                 <h5 class="card-title">Release Date : @Model.ReleaseDate.Date.ToString("dd MMMM, yyyy")</h5>
                 <div class="mt-auto">
 
-                    @if (Model.isFavorite)
+                    @*@if (Model.IsFavorite)*@
+                    @if (true)
                     {
                         <button class="remove-from-favorites-button btn btn-secondary text-white my-1 d-block w-100" type="submit" value="@Model.Id">Remove from Favorite</button>
                     }

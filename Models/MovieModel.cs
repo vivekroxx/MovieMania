@@ -7,7 +7,7 @@ namespace MovieMania.Models
         [Key]
         public int Id { get; set; }
         [Required]
-        public string Name { get; set; }
+        public string? Name { get; set; }
         public string? Description { get; set; }
         public string? Author { get; set; }
         public DateTime ReleaseDate { get; set; }
@@ -19,13 +19,13 @@ namespace MovieMania.Models
 
     public class MovieViewModel : MovieModel
     {
-        public bool isFavorite { get; set; }
+        public bool IsFavorite { get; set; }
     }
 
     public class MovieCreateViewModel
     {
         [Required]
-        public string Name { get; set; }
+        public string? Name { get; set; }
         public string? Description { get; set; }
         public string? Author { get; set; }
         [Display(Name = "Release Date")]
