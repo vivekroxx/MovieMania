@@ -11,7 +11,7 @@ namespace MovieMania.Models
         }
 
         public virtual DbSet<MovieModel> Movies { get; set; }
-        public virtual DbSet<FavoriteMovieModel> FavoriteMovie { get; set; }
+        public virtual DbSet<FavoriteMovie> FavoriteMovie { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

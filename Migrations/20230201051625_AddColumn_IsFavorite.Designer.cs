@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MovieMania.Models;
 
@@ -11,9 +12,11 @@ using MovieMania.Models;
 namespace MovieMania.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230201051625_AddColumn_IsFavorite")]
+    partial class AddColumnIsFavorite
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -158,14 +161,14 @@ namespace MovieMania.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "cd82d832-dd67-4232-bde9-b96c7f5ed790",
+                            ConcurrencyStamp = "35476f9e-bf15-4a0f-bc13-17bdbeb9fa72",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "c397fd00-cec9-4f2b-8794-dd4d03fd5b9d",
+                            ConcurrencyStamp = "6d7fb7e8-84aa-46af-9b6a-d58675d3e036",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -245,16 +248,13 @@ namespace MovieMania.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("MovieMania.Models.FavoriteMovie", b =>
+            modelBuilder.Entity("MovieMania.Models.FavoriteMovieModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<bool>("IsFavorite")
-                        .HasColumnType("bit");
 
                     b.Property<int>("MovieId")
                         .HasColumnType("int");
@@ -289,6 +289,9 @@ namespace MovieMania.Migrations
 
                     b.Property<TimeSpan>("Duration")
                         .HasColumnType("time");
+
+                    b.Property<bool>("IsFavorite")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()

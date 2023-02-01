@@ -17,14 +17,21 @@
                     <p class="fs-6 m-0 text-muted">@item.Author</p>
                 </div>
                 <div class="card-footer m-0">
+                    @{
+                        string btnText;
+                        string btnTypeClass;
+                        if (item.IsFavorite)
+                        {
+                            btnText = "Remove From Favorite";
+                            btnTypeClass = "btn-danger";
+                        }
+                        else
+                        {
+                            btnText = "Add To Favorite";
+                            btnTypeClass = "btn-success";
+                        }
 
-                    @if (item.IsFavorite)
-                    {
-                        <button class="remove-from-favorites-button btn btn-sm btn-secondary text-white my-1 d-block w-100" type="submit" value="@item.Id">Remove from Favorite</button>
-                    }
-                    else
-                    {
-                        <button class="add-to-favorites-button btn btn-sm btn-success text-white my-1 d-block w-100" type="submit" value="@item.Id">Add to Favorite</button>
+                        <button class="add-remove-favorite-button btn btn-sm @btnTypeClass text-white my-1 d-block w-100" type="submit" value="@item.Id">@btnText</button>
                     }
 
                     <a asp-controller="Home" asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-primary d-block">View Details</a>
@@ -34,8 +41,15 @@
     }
     else
     {
-        <div class="text-center">
-            No Movies to show at this moment.
+        <div class="d-flex align-items-center justify-content-center flex-column vh-100 text-center fw-bold">
+
+            <h2>No Movies to show at this moment.</h2>
+
+            @if (User.IsInRole(UserRoleType.Admin.ToString()))
+            {
+                <p>Please Add Movies to show.</p>
+                <a class="btn btn-primary" asp-controller="Movie" asp-action="Create">Add Movie</a>
+            }
         </div>
     }
 </div>

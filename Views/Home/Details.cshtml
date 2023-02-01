@@ -1,4 +1,4 @@
-﻿@model MovieModel
+﻿@model MovieViewModel
 @{
     ViewData["Title"] = "Movie Detail";
     var photoPath = "~/image/" + (!String.IsNullOrWhiteSpace(Model.PhotoName) ? Model.PhotoName : "noimage.webp");
@@ -18,14 +18,21 @@
                 <h5 class="card-title">Release Date : @Model.ReleaseDate.Date.ToString("dd MMMM, yyyy")</h5>
                 <div class="mt-auto">
 
-                    @*@if (Model.IsFavorite)*@
-                    @if (true)
-                    {
-                        <button class="remove-from-favorites-button btn btn-secondary text-white my-1 d-block w-100" type="submit" value="@Model.Id">Remove from Favorite</button>
-                    }
-                    else
-                    {
-                        <button class="add-to-favorites-button btn btn-success text-white my-1 d-block w-100" type="submit" value="@Model.Id">Add to Favorite</button>
+                    @{
+                        string btnText;
+                        string btnTypeClass;
+                        if (Model.IsFavorite)
+                        {
+                            btnText = "Remove From Favorite";
+                            btnTypeClass = "btn-danger";
+                        }
+                        else
+                        {
+                            btnText = "Add To Favorite";
+                            btnTypeClass = "btn-success";
+                        }
+
+                        <button class="add-remove-favorite-button btn @btnTypeClass text-white my-1 d-block w-100" type="submit" value="@Model.Id">@btnText</button>
                     }
 
                     @if (User.IsInRole(UserRoleType.Admin.ToString()))

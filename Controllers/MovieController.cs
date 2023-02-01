@@ -159,41 +159,47 @@ namespace MovieMania.Controllers
             return RedirectToAction(nameof(HomeController.Index), "Home");
         }
 
-        [HttpPost("/Movie/AddToFavorite/{movieId}")]
-        public async Task<IActionResult> AddToFavorite(int movieId)
+        [AllowAnonymous]
+        [HttpPost("/Movie/AddOrRemoveFromFavorite/{movieId}")]
+        public async Task<IActionResult> AddOrRemoveFromFavorite(int movieId)
         {
             var user = await _userManager.GetUserAsync(User);
 
-            var isFavoriteMovieAlreadyExist = _db.FavoriteMovie.Where(x => x.MovieId == movieId && x.UserId == user.Id).Any();
+            var movie = _db.FavoriteMovie.FirstOrDefault(x => x.MovieId == movieId && x.UserId == user.Id);
 
-            if (!isFavoriteMovieAlreadyExist)
+            string response;
+
+            if (movie == null)
             {
-                var favoriteMovie = new FavoriteMovieModel
+                var newFavoriteMovie = new FavoriteMovie
                 {
                     UserId = user.Id,
-                    MovieId = movieId
+                    MovieId = movieId,
+                    IsFavorite = true
                 };
+                response = "added";
 
-                _db.FavoriteMovie.Add(favoriteMovie);
+                _db.FavoriteMovie.Add(newFavoriteMovie);
                 _db.SaveChanges();
             }
-
-            return Ok();
-        }
-
-        [HttpPost("/Movie/RemoveFromFavorite/{movieId}")]
-        public async Task<IActionResult> RemoveFromFavorite(int movieId)
-        {
-            var user = await _userManager.GetUserAsync(User);
-            var favorite = _db.FavoriteMovie.FirstOrDefault(x => x.MovieId == movieId && x.UserId == user.Id);
-
-            if (favorite != null)
+            else
             {
-                _db.FavoriteMovie.Remove(favorite);
+                if (movie.IsFavorite)
+                {
+                    movie.IsFavorite = false;
+                    response = "removed";
+                }
+                else
+                {
+                    movie.IsFavorite = true;
+                    response = "added";
+                }
+
+                _db.Update(movie);
                 _db.SaveChanges();
             }
 
-            return Ok();
+            return Json(response);
         }
 
         private void AddErrors(IdentityResult result)

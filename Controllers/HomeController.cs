@@ -18,38 +18,38 @@ namespace MovieMania.Controllers
             _userManager = userManager;
         }
 
-        public async Task<IActionResult> Index(MovieViewModel model)
+        public async Task<IActionResult> Index()
         {
-            var movieList = _db.Movies.ToList();
+            var movies = _db.Movies.ToList();
+
+            List<MovieViewModel> movieList = new();
             var user = await _userManager.GetUserAsync(User);
 
-            List<MovieViewModel> movies = new();
-
-            if (movieList.Any())
+            foreach (var movie in movies)
             {
-                foreach (var movie in movieList)
+                var favoriteMovie = _db.FavoriteMovie.FirstOrDefault(x => x.MovieId == movie.Id && x.UserId == user.Id);
+
+                var data = new MovieViewModel
                 {
-                    var isFavorite = _db.FavoriteMovie.Where(x => x.MovieId == movie.Id && x.UserId == user.Id).Any();
+                    Id = movie.Id,
+                    Author = movie.Author,
+                    Name = movie.Name,
+                    CreatedBy = movie.CreatedBy,
+                    CreatedOn = movie.CreatedOn,
+                    Description = movie.Description,
+                    Duration = movie.Duration,
+                    PhotoName = movie.PhotoName,
+                    ReleaseDate = movie.ReleaseDate,
+                    IsFavorite = favoriteMovie != null ? favoriteMovie.IsFavorite : false
+                };
 
-                    model.Id = movie.Id;
-                    model.Name = movie.Name;
-                    model.Description = movie.Description;
-                    model.IsFavorite = isFavorite;
-                    model.Author = movie.Author;
-                    model.Duration = movie.Duration;
-                    model.CreatedOn = movie.CreatedOn;
-                    model.CreatedBy = movie.CreatedBy;
-                    model.PhotoName = movie.PhotoName;
-                    model.ReleaseDate = movie.ReleaseDate;
-
-                    movies.Add(model);
-                }
+                movieList.Add(data);
             }
 
-            return View(movies);
+            return View(movieList);
         }
 
-        public IActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
             var movie = _db.Movies.FirstOrDefault(x => x.Id == id);
 
@@ -58,40 +58,35 @@ namespace MovieMania.Controllers
                 return View("NotFound");
             }
 
-            return View(movie);
+            var user = await _userManager.GetUserAsync(User);
+            var favoriteMovie = _db.FavoriteMovie.FirstOrDefault(x => x.MovieId == movie.Id && x.UserId == user.Id);
+
+            var result = new MovieViewModel
+            {
+                Id = movie.Id,
+                Author = movie.Author,
+                Name = movie.Name,
+                CreatedBy = movie.CreatedBy,
+                CreatedOn = movie.CreatedOn,
+                Description = movie.Description,
+                Duration = movie.Duration,
+                PhotoName = movie.PhotoName,
+                ReleaseDate = movie.ReleaseDate,
+                IsFavorite = favoriteMovie != null ? favoriteMovie.IsFavorite : false
+            };
+
+            return View(result);
         }
 
         [HttpGet]
-        public async Task<IActionResult> FavoriteMovies(MovieViewModel model)
+        public async Task<IActionResult> FavoriteMovies()
         {
             var user = await _userManager.GetUserAsync(User);
-            var movieList = _db.Movies.Where(x => x.Id == user.Id).ToList();
-            List<MovieViewModel> movies = new();
 
-            if (movieList.Any())
-            {
-                foreach (var movie in movieList)
-                {
-                    var isFavorite = _db.FavoriteMovie.Where(x => x.MovieId == movie.Id && x.UserId == user.Id).Any();
+            var favoriteMovieIds = _db.FavoriteMovie.Where(x => x.UserId == user.Id && x.IsFavorite == true).Select(x => x.MovieId);
+            var movieList = _db.Movies.Where(x => favoriteMovieIds.Contains(x.Id));
 
-                    model.Id = movie.Id;
-                    model.Name = movie.Name;
-                    model.Description = movie.Description;
-                    model.IsFavorite = isFavorite;
-                    model.Author = movie.Author;
-                    model.Duration = movie.Duration;
-                    model.CreatedOn = movie.CreatedOn;
-                    model.CreatedBy = movie.CreatedBy;
-                    model.PhotoName = movie.PhotoName;
-                    model.ReleaseDate = movie.ReleaseDate;
-
-                    movies.Add(model);
-                }
-            }
-
-            var favoriteMovieList = movies.Where(x => x.IsFavorite == true);
-
-            return View(favoriteMovieList);
+            return View(movieList);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
