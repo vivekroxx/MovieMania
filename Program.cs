@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
+using MovieMania.Helper;
 using MovieMania.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,6 +17,8 @@ builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
 })
 .AddEntityFrameworkStores<ApplicationDbContext>()
 .AddDefaultTokenProviders();
+
+builder.Services.AddScoped<ICssHelper, CssHelper>();
 
 builder.Services.AddMvc(options =>
 {
