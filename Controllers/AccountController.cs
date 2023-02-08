@@ -5,7 +5,6 @@ using MovieMania.Models;
 
 namespace MovieMania.Controllers
 {
-    //[Route("/[action]")]
     public class AccountController : Controller
     {
         private readonly ApplicationDbContext _db;

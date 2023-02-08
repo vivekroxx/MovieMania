@@ -1,4 +1,10 @@
-﻿<header style="position: sticky; top: 0; z-index: 100;">
+﻿@{
+    var user = userManager.GetUserAsync(User);
+    var isAdmin = User.IsInRole(UserRoleType.Admin.ToString());
+    var isSignedIn = signInManager.IsSignedIn(User);
+}
+
+<header style="position: sticky; top: 0; z-index: 100;">
     <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
         <div class="container-fluid">
             <a class="navbar-brand" href="javascript:void(0)">MovieMania</a>
@@ -12,7 +18,7 @@
                         <a class="nav-link @Css.Active("Index", "Home")" asp-controller="Home" asp-action="Index">Home</a>
                     </li>
 
-                    @if (User.IsInRole(UserRoleType.Admin.ToString()))
+                    @if (isAdmin)
                     {
                         <li class="nav-item">
                             <a class="nav-link  @Css.Active("Create", "Movie")" asp-controller="Movie" asp-action="Create">Add Movie</a>
@@ -29,7 +35,7 @@
                         <a href="javascript:void(0)" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             @{
                                 var imagePath = string.Empty;
-                                if (User.IsInRole(UserRoleType.Admin.ToString()))
+                                if (isAdmin)
                                 {
                                     imagePath = "admin.jpg";
                                 }
@@ -42,14 +48,17 @@
                         </a>
 
                         <ul class="dropdown-menu dropdown-menu-end">
-                            @if (signInManager.IsSignedIn(User))
+                            @if (isSignedIn)
                             {
                                 <li class="p-2">
-                                    <p class="fw-bold m-0">UserName</p>
-                                    <p class="text-muted m-0">@User.Identity?.Name</p>
+                                    <h3 class="fw-bold m-0">@user.Result.Name</h3>
+                                    <p class="text-muted m-0">@user.Result.UserName</p>
                                 </li>
                                 <li>
                                     <hr class="m-0" />
+                                </li>
+                                <li>
+                                    <a asp-action="EditProfile" asp-controller="Account" class="dropdown-item">Edit Profile</a>
                                 </li>
                                 <li>
                                     <a asp-action="ChangePassword" asp-controller="Account" class="dropdown-item">Change Password</a>
